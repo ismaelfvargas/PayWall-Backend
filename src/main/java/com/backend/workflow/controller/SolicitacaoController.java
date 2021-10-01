@@ -1,7 +1,6 @@
 package com.backend.workflow.controller;
 
 
-import com.backend.workflow.repository.AdiantamentoRepository;
 import com.backend.workflow.repository.PagamentoRepository;
 import com.backend.workflow.util.BigDecimalConverter;
 import com.backend.workflow.entity.Solicitacao;
@@ -22,7 +21,6 @@ public class SolicitacaoController {
 
     private final SolicitacaoRepository repository;
     private final BigDecimalConverter bigDecimalConverter;
-    private final AdiantamentoRepository adiantamentoRepository;
     private final PagamentoRepository pagamentoRepository;
 
     // Metodo p/ salvar uma solicitacao

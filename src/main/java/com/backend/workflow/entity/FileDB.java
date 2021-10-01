@@ -19,6 +19,7 @@ public class FileDB {
     @Lob
     private byte[] data;
 
+    @Column(name = "id_pagamento")
     private Integer idSolicitacao;
 
     public FileDB() {
