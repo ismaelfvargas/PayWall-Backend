@@ -58,6 +58,10 @@ public class Pagamento {
     @Column(length = 11)
     private String tributo;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name="id_usuario")
+    Usuario usuario;
+
     // inclui a data automatico
     @PrePersist
     public void insereDataAutomatico() {
