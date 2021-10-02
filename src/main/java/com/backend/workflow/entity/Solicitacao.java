@@ -30,36 +30,4 @@ public class Solicitacao {
     @NotEmpty(message = "campo nome é obrigatorio")
     private String nomeFornecedor;
 
-    @Column(nullable = false, length = 150)
-    private String observacao;
-
-    @Column(name = "data_cadastro", updatable = false)
-    @JsonFormat(pattern = "yyyy/MM/dd")
-    private LocalDate dataCadastro;
-
-    @Column(name = "data_vencimento", nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date dataVencimento;
-
-    @Column(name = "data_emissao", nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date dataEmissao;
-
-    @Column(name = "valor_bruto")
-    @NotEmpty(message = "campo valor bruto é obrigatorio")
-    private String valorBruto;
-
-    @Column(name = "valor_liquido", nullable = false)
-    @NotEmpty(message = "campo valor líquido é obrigatorio")
-    private String valorLiquido;
-
-    @Column(name = "desconto", length = 11)
-    private String desconto;
-
-    // inclui a data automatico
-    @PrePersist
-    public void insereDataAutomatico() {
-        setDataCadastro(LocalDate.now());
-    }
-
 }

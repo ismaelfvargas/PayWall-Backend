@@ -13,19 +13,12 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 
-@Table(name = "adiantamentos")
-public class Adiantamento {
+
+public class TipoPedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_adiantamento")
+    @Column(name = "id_tipo_pedido")
     private Integer id;
-
-    @Column(name = "status_adiantamento", length = 15)
-    private String statusAdiantamento;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name="id_solicitacao")
-    private Solicitacao solicitacao;
 
 }

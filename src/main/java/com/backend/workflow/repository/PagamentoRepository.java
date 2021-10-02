@@ -14,9 +14,9 @@ import java.util.Optional;
 
 public interface PagamentoRepository extends JpaRepository<Pagamento, Integer> {
 
-    @Query( "select s from Pagamento s join s.solicitacao c " +
-            "where upper( c.nomeFornecedor ) like upper( :nomeFornecedor ) and c.dataEmissao =:dataEmissao " )
-    List<Pagamento> findByNomeFornecedorAndDataEmissao(
-            @Param("nomeFornecedor") String nomeForcenedor, @Param("dataEmissao") Date dataEmissao);
+//    @Query( "select s from Pagamento s join s.solicitacao c " +
+//            "where upper( c.nomeFornecedor ) like upper( :nomeFornecedor ) and c.dataEmissao =:dataEmissao " )
+//    List<Pagamento> findByNomeFornecedorAndDataEmissao(
+//            @Param("nomeFornecedor") String nomeForcenedor, @Param("dataEmissao") Date dataEmissao);
 
 }

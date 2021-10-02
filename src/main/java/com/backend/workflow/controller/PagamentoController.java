@@ -31,18 +31,16 @@ public class PagamentoController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void salvar(@RequestBody @Valid Pagamento pagamento){
-        log.info(pagamento.getSolicitacao().getObservacao());
-        solicitacaoRepository.save(pagamento.getSolicitacao());
         repository.save(pagamento);
     }
 
-    @GetMapping
-    public List<Pagamento> pesquisar(
-        @RequestParam(value = "nomeFornecedor", required = false, defaultValue = "") String nomeForcenedor,
-        @RequestParam(value = "dataEmissao", required = false) Date dataEmissao
-    ) {
-        return repository.findByNomeFornecedorAndDataEmissao( "%" + nomeForcenedor + "%", dataEmissao);
-    }
+//    @GetMapping
+//    public List<Pagamento> pesquisar(
+//        @RequestParam(value = "nomeFornecedor", required = false, defaultValue = "") String nomeForcenedor,
+//        @RequestParam(value = "dataEmissao", required = false) Date dataEmissao
+//    ) {
+//        return repository.findByNomeFornecedorAndDataEmissao( "%" + nomeForcenedor + "%", dataEmissao);
+//    }
 
     // metodo para achar um pagamento pelo ID, depois exception para caso não exista o ID (Postman)
     @GetMapping("/{id}")
