@@ -62,6 +62,10 @@ public class Pagamento {
     @JoinColumn(name="id_usuario")
     Usuario usuario;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name="id_centro_custo")
+    CentroCusto centroCusto;
+
     // inclui a data automatico
     @PrePersist
     public void insereDataAutomatico() {
