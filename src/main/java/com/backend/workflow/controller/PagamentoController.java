@@ -24,14 +24,13 @@ import java.util.List;
 public class PagamentoController {
 
     private final PagamentoRepository repository;
-    private final SolicitacaoRepository solicitacaoRepository;
     private final BigDecimalConverter bigDecimalConverter;
 
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void salvar(@RequestBody @Valid Pagamento pagamento){
-        repository.save(pagamento);
+    public Pagamento salvar(@RequestBody @Valid Pagamento pagamento){
+        return repository.save(pagamento);
     }
 
 //    @GetMapping
