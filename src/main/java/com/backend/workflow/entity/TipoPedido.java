@@ -21,4 +21,7 @@ public class TipoPedido {
     @Column(name = "id_tipo_pedido")
     private Integer id;
 
+    @Column(name = "nome_pedido", nullable = false)
+    private String nomePedido;
+
 }

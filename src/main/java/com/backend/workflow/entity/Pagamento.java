@@ -33,7 +33,6 @@ public class Pagamento {
     private String observacao;
 
     @Column(name = "data_cadastro", updatable = false)
-    @JsonFormat(pattern = "yyyy/MM/dd")
     private LocalDate dataCadastro;
 
     @Column(name = "data_vencimento", nullable = false)
@@ -65,6 +64,10 @@ public class Pagamento {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="id_centro_custo")
     CentroCusto centroCusto;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name="tipo_pedido")
+    TipoPedido tipoPedido;
 
     // inclui a data automatico
     @PrePersist
