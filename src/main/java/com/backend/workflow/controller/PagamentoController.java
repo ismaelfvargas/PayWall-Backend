@@ -4,8 +4,10 @@ package com.backend.workflow.controller;
 import com.backend.workflow.dto.PagamentoDTO;
 import com.backend.workflow.entity.Pagamento;
 import com.backend.workflow.entity.TipoPedido;
+import com.backend.workflow.entity.TipoStatus;
 import com.backend.workflow.repository.PagamentoRepository;
 import com.backend.workflow.repository.TipoPedidoRepository;
+import com.backend.workflow.repository.TipoStatusRepository;
 import com.backend.workflow.util.BigDecimalConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,10 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.PrePersist;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -29,18 +27,25 @@ public class PagamentoController {
 
     private final PagamentoRepository repository;
     private final TipoPedidoRepository tipoPedidoRepository;
+    private final TipoStatusRepository tipoStatusRepository;
     private final BigDecimalConverter bigDecimalConverter;
 
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Pagamento salvar(@RequestBody PagamentoDTO dto){
-//        LocalDate dataLocal = LocalDate.parse(dto.getDataCadastro(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         Integer idTipoPedido = dto.getIdTipoPedido();
+        Integer idTipoStatus = dto.getIdStatusPedido();
 
         TipoPedido tipoPedido = tipoPedidoRepository.findById(idTipoPedido).orElseThrow(() ->
                 new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "Tipo do pedido inexistente"
+                )
+        );
+
+        TipoStatus tipoStatus = tipoStatusRepository.findById(idTipoStatus).orElseThrow(() ->
+                new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "Tipo do status inexistente"
                 )
         );
 
@@ -55,6 +60,7 @@ public class PagamentoController {
         pagamento.setValorBruto(dto.getValorBruto());
         pagamento.setValorLiquido(dto.getValorLiquido());
         pagamento.setTipoPedido(tipoPedido);
+        pagamento.setTipoStatus(tipoStatus);
 
         return repository.save(pagamento);
     }
@@ -62,9 +68,10 @@ public class PagamentoController {
     @GetMapping
     public List<Pagamento> pesquisar(
         @RequestParam(value = "nomePedido", required = false, defaultValue = "") String nomePedido,
-        @RequestParam(value = "nomeFornecedor", required = false, defaultValue = "") String nomeForcenedor
+        @RequestParam(value = "nomeFornecedor", required = false, defaultValue = "") String nomeForcenedor,
+        @RequestParam(value = "nomeStatus", required = false, defaultValue = "") String nomeStatus
     ) {
-        return repository.findByNomeFornecedorAndNomePedido( "%" + nomeForcenedor + "%", "%" + nomePedido + "%");
+        return repository.findByNomeFornecedorAndNomePedido( "%" + nomeForcenedor + "%", "%" + nomePedido + "%", "%" + nomeStatus + "%");
     }
 
     // metodo para achar um pagamento pelo ID, depois exception para caso não exista o ID (Postman)
