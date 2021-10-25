@@ -26,6 +26,7 @@ public class PagamentoDTO {
     private Integer idUsuario;
     private Integer idCentroDeCusto;
     private Integer idTipoPedido;
+    private Integer idStatusPedido;
 
     // inclui a data automatico
     @PrePersist

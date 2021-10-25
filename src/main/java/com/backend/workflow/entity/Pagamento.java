@@ -69,6 +69,10 @@ public class Pagamento {
     @JoinColumn(name="tipo_pedido")
     TipoPedido tipoPedido;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name="id_tipo_status")
+    TipoStatus tipoStatus;
+
     // inclui a data automatico
     @PrePersist
     public void insereDataAutomatico() {
