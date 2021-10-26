@@ -21,7 +21,7 @@ import java.util.Date;
 public class Pagamento {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_pagamento")
     private Integer id;
 
@@ -44,7 +44,6 @@ public class Pagamento {
     private Date dataEmissao;
 
     @Column(name = "valor_bruto")
-    @NotEmpty(message = "campo valor bruto é obrigatorio")
     private String valorBruto;
 
     @Column(name = "valor_liquido", nullable = false)
