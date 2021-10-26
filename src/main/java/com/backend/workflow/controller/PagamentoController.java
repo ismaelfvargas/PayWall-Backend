@@ -35,7 +35,7 @@ public class PagamentoController {
     @ResponseStatus(HttpStatus.CREATED)
     public Pagamento salvar(@RequestBody PagamentoDTO dto){
         Integer idTipoPedido = dto.getIdTipoPedido();
-        Integer idTipoStatus = dto.getIdStatusPedido();
+        Integer idTipoStatus = dto.getIdTipoStatus();
 
         TipoPedido tipoPedido = tipoPedidoRepository.findById(idTipoPedido).orElseThrow(() ->
                 new ResponseStatusException(
