@@ -60,9 +60,9 @@ public class Pagamento {
     @JoinColumn(name="id_usuario")
     Usuario usuario;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name="id_centro_custo")
-    CentroCusto centroCusto;
+//    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinColumn(name="id_centro_custo")
+//    CentroCusto centroCusto;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="tipo_pedido")
@@ -71,6 +71,10 @@ public class Pagamento {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="id_tipo_status")
     TipoStatus tipoStatus;
+
+    @Column(name = "centro_custo")
+    @NotEmpty(message = "campo centro de custo é obrigatorio")
+    private String centroDeCusto;
 
     // inclui a data automatico
     @PrePersist

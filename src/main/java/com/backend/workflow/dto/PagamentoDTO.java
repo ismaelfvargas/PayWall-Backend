@@ -23,8 +23,9 @@ public class PagamentoDTO {
     private String valorLiquido;
     private String desconto;
     private String tributo;
-    private Integer idUsuario;
+    private String centroDeCusto;
     private Integer idCentroDeCusto;
+    private Integer idUsuario;
     private Integer idTipoPedido;
     private Integer idTipoStatus;
 
