@@ -5,13 +5,17 @@ import com.backend.workflow.dto.PagamentoDTO;
 import com.backend.workflow.entity.Pagamento;
 import com.backend.workflow.entity.TipoPedido;
 import com.backend.workflow.entity.TipoStatus;
+import com.backend.workflow.entity.Usuario;
 import com.backend.workflow.repository.PagamentoRepository;
 import com.backend.workflow.repository.TipoPedidoRepository;
 import com.backend.workflow.repository.TipoStatusRepository;
+import com.backend.workflow.repository.UsuarioRepository;
 import com.backend.workflow.util.BigDecimalConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,11 +33,27 @@ public class PagamentoController {
     private final TipoPedidoRepository tipoPedidoRepository;
     private final TipoStatusRepository tipoStatusRepository;
     private final BigDecimalConverter bigDecimalConverter;
+    private final UsuarioRepository usuarioRepository;
 
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Pagamento salvar(@RequestBody PagamentoDTO dto){
+
+        // TODO: Passar para uma função global/compartilhada
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String username = "";
+
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        //
+
+        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+
         Integer idTipoPedido = dto.getIdTipoPedido();
         Integer idTipoStatus = dto.getIdTipoStatus();
 
@@ -61,6 +81,7 @@ public class PagamentoController {
         pagamento.setValorLiquido(dto.getValorLiquido());
         pagamento.setTipoPedido(tipoPedido);
         pagamento.setTipoStatus(tipoStatus);
+        pagamento.setUsuario(usuario);
 
         return repository.save(pagamento);
     }
