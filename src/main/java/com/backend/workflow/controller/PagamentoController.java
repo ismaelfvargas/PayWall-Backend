@@ -49,6 +49,7 @@ public class PagamentoController {
                 )
         );
 
+
         Pagamento pagamento = new Pagamento();
         pagamento.setTributo(dto.getTributo());
         pagamento.setDataCadastro(dto.getDataCadastro());
@@ -59,6 +60,7 @@ public class PagamentoController {
         pagamento.setDesconto(dto.getDesconto());
         pagamento.setValorBruto(dto.getValorBruto());
         pagamento.setValorLiquido(dto.getValorLiquido());
+        pagamento.setCentroDeCusto(dto.getCentroDeCusto());
         pagamento.setTipoPedido(tipoPedido);
         pagamento.setTipoStatus(tipoStatus);
 
@@ -67,11 +69,12 @@ public class PagamentoController {
 
     @GetMapping
     public List<Pagamento> pesquisar(
-        @RequestParam(value = "nomePedido", required = false, defaultValue = "") String nomePedido,
+//        @RequestParam(value = "nomePedido", required = false, defaultValue = "") String nomePedido,
         @RequestParam(value = "nomeFornecedor", required = false, defaultValue = "") String nomeForcenedor,
         @RequestParam(value = "nomeStatus", required = false, defaultValue = "") String nomeStatus
     ) {
-        return repository.findByNomeFornecedorAndNomePedido( "%" + nomeForcenedor + "%", "%" + nomePedido + "%", "%" + nomeStatus + "%");
+//        return repository.findByNomeFornecedorAndNomePedido( "%" + nomeForcenedor + "%", "%" + nomePedido + "%", "%" + nomeStatus + "%");
+        return repository.findByNomeFornecedorAndNomePedido( "%" + nomeForcenedor + "%", "%" + nomeStatus + "%");
     }
 
     // metodo para achar um pagamento pelo ID, depois exception para caso não exista o ID (Postman)
