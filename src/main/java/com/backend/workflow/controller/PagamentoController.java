@@ -94,8 +94,8 @@ public class PagamentoController {
         @RequestParam(value = "nomeFornecedor", required = false, defaultValue = "") String nomeForcenedor,
         @RequestParam(value = "nomeStatus", required = false, defaultValue = "") String nomeStatus
     ) {
-//        return repository.findByNomeFornecedorAndNomePedido( "%" + nomeForcenedor + "%", "%" + nomePedido + "%", "%" + nomeStatus + "%");
-        return repository.findByNomeFornecedorAndNomePedido( "%" + nomeForcenedor + "%", "%" + nomeStatus + "%");
+//        return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeForcenedor + "%", "%" + nomePedido + "%", "%" + nomeStatus + "%");
+        return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%");
     }
 
     // metodo para achar um pagamento pelo ID, depois exception para caso não exista o ID (Postman)
