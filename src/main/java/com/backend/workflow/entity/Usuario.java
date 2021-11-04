@@ -30,4 +30,8 @@ public class Usuario {
     @NotEmpty(message = "{O campo role é obrigatório}")
     private String roles;
 
+    @Column(nullable = false)
+    @NotEmpty(message = "{O campo area é obrigatório}")
+    private String area;
+
 }

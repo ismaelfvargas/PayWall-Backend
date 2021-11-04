@@ -24,4 +24,25 @@ public interface PagamentoRepository extends JpaRepository<Pagamento, Integer> {
             @Param("nomeFornecedor") String nomeFornecedor,
             @Param("nomeStatus") String nomeStatus);
 
+    @Query( "select s from Pagamento s join fetch s.tipoStatus t " +
+            "where upper( s.nomeFornecedor ) like upper( :nomeFornecedor ) and upper( t.nomeStatus ) like upper( :nomeStatus ) and s.usuario.id = :idUsuario" )
+    List<Pagamento> findByNomeFornecedorAndNomeStatusAndUserId(
+            @Param("nomeFornecedor") String nomeFornecedor,
+            @Param("nomeStatus") String nomeStatus,
+            @Param("idUsuario") Integer idUsuario);
+
+    @Query( "select s from Pagamento s join fetch s.tipoStatus t join fetch s.usuario u " +
+            "where upper( s.nomeFornecedor ) like upper( :nomeFornecedor ) and upper( t.nomeStatus ) like upper( :nomeStatus ) and u.area = :area" )
+    List<Pagamento> findByNomeFornecedorAndNomeStatusAndArea(
+            @Param("nomeFornecedor") String nomeFornecedor,
+            @Param("nomeStatus") String nomeStatus,
+            @Param("area") String area);
+
+    @Query( "select s from Pagamento s join fetch s.tipoStatus t join fetch s.usuario u " +
+            "where upper( s.nomeFornecedor ) like upper( :nomeFornecedor ) and upper( t.nomeStatus ) like upper( :nomeStatus ) and u.area = :area and u.roles <> 'GERENTE' ")
+    List<Pagamento> findByNomeFornecedorAndNomeStatusAndAreaAndNotGerente(
+            @Param("nomeFornecedor") String nomeFornecedor,
+            @Param("nomeStatus") String nomeStatus,
+            @Param("area") String area);
+
 }
