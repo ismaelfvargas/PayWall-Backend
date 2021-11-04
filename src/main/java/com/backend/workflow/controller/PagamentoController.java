@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @Slf4j
@@ -55,7 +56,7 @@ public class PagamentoController {
         Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
         Integer idTipoPedido = dto.getIdTipoPedido();
-        Integer idTipoStatus = dto.getIdTipoStatus();
+//        Integer idTipoStatus = dto.getIdTipoStatus();
 
         TipoPedido tipoPedido = tipoPedidoRepository.findById(idTipoPedido).orElseThrow(() ->
                 new ResponseStatusException(
@@ -63,7 +64,7 @@ public class PagamentoController {
                 )
         );
 
-        TipoStatus tipoStatus = tipoStatusRepository.findById(idTipoStatus).orElseThrow(() ->
+        TipoStatus tipoStatus = tipoStatusRepository.findById(1).orElseThrow(() ->
                 new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "Tipo do status inexistente"
                 )
@@ -90,13 +91,35 @@ public class PagamentoController {
 
     @GetMapping
     public List<Pagamento> pesquisar(
-//        @RequestParam(value = "nomePedido", required = false, defaultValue = "") String nomePedido,
         @RequestParam(value = "nomeFornecedor", required = false, defaultValue = "") String nomeForcenedor,
         @RequestParam(value = "nomeStatus", required = false, defaultValue = "") String nomeStatus
     ) {
-//        return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeForcenedor + "%", "%" + nomePedido + "%", "%" + nomeStatus + "%");
+
+        // TODO: Passar para uma função global/compartilhada
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String username = "";
+
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        //
+
+        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+
+        if (Objects.equals(new String("USUARIO"), new String(usuario.getRoles()))){
+            return repository.findByNomeFornecedorAndNomeStatusAndUserId( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getId());
+        }else if (Objects.equals(new String("GERENTE"), new String(usuario.getRoles()))){
+            return repository.findByNomeFornecedorAndNomeStatusAndArea( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getArea());
+        }else if (Objects.equals(new String("COORDENADOR"), new String(usuario.getRoles()))){
+            return repository.findByNomeFornecedorAndNomeStatusAndAreaAndNotGerente( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getArea());
+        }
         return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%");
     }
+
+
 
     // metodo para achar um pagamento pelo ID, depois exception para caso não exista o ID (Postman)
     @GetMapping("/{id}")
