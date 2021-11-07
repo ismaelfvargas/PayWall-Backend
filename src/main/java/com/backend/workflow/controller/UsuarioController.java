@@ -64,4 +64,32 @@ public class UsuarioController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @GetMapping("/permissao/assistente")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void permissaoAssistente(){
+
+        // TODO: Passar para uma função global/compartilhada
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String username = "";
+
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        //
+
+        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+
+        String adminRole = usuario.getRoles();
+        String assistente = "ASSISTENTE";
+
+
+        if( (!Objects.equals(new String(adminRole), new String(assistente)))){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 }
