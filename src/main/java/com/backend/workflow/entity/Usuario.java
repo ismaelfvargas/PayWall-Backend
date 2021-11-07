@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ public class Usuario {
 
     @Column(unique = true, name = "nome")
     @NotEmpty(message = "{O campo login é obrigatório}")
+    @Email
     private String username;
 
     @Column(name = "senha", nullable = false)

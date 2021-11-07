@@ -13,6 +13,7 @@ import com.backend.workflow.repository.UsuarioRepository;
 import com.backend.workflow.util.BigDecimalConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -122,10 +123,21 @@ public class PagamentoController {
 
 
     // metodo para achar um pagamento pelo ID, depois exception para caso não exista o ID (Postman)
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public Pagamento acharPorId(@PathVariable Integer id){
         return repository
                 .findById(id)
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public void atualizar(@PathVariable Integer id, @RequestBody Pagamento pagamentoAtualizado){
+        repository.findById(id)
+                .map(pagamento -> {
+                    pagamento.setTipoStatus(pagamentoAtualizado.getTipoStatus());
+                    return repository.save(pagamentoAtualizado);
+                })
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
