@@ -2,9 +2,11 @@ package com.backend.workflow.repository;
 
 import com.backend.workflow.entity.Pagamento;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 
@@ -39,10 +41,25 @@ public interface PagamentoRepository extends JpaRepository<Pagamento, Integer> {
             @Param("area") String area);
 
     @Query( "select s from Pagamento s join fetch s.tipoStatus t join fetch s.usuario u " +
+            "where upper( s.nomeFornecedor ) like upper( :nomeFornecedor ) and upper( t.nomeStatus ) like upper( :nomeStatus ) and u.area = :area and u.roles <> 'GERENTE' and u.roles <> 'COODENADOR' ")
+    List<Pagamento> findByNomeFornecedorAndNomeStatusAndAreaAndNotGerenteNotCoordenador(
+            @Param("nomeFornecedor") String nomeFornecedor,
+            @Param("nomeStatus") String nomeStatus,
+            @Param("area") String area);
+
+    @Query( "select s from Pagamento s join fetch s.tipoStatus t join fetch s.usuario u " +
             "where upper( s.nomeFornecedor ) like upper( :nomeFornecedor ) and upper( t.nomeStatus ) like upper( :nomeStatus ) and u.area = :area and u.roles <> 'GERENTE' ")
     List<Pagamento> findByNomeFornecedorAndNomeStatusAndAreaAndNotGerente(
             @Param("nomeFornecedor") String nomeFornecedor,
             @Param("nomeStatus") String nomeStatus,
             @Param("area") String area);
+
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Pagamento p set p.tipoStatus.id = :tipoStatus where p.id = :id")
+    void aprovarStatus(
+            @Param("id") Integer id,
+            @Param("tipoStatus") Integer tipoStatus);
 
 }
