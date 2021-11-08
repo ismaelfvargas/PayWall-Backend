@@ -13,8 +13,8 @@ import com.backend.workflow.repository.UsuarioRepository;
 import com.backend.workflow.util.BigDecimalConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -113,9 +113,9 @@ public class PagamentoController {
         if (Objects.equals(new String("USUARIO"), new String(usuario.getRoles()))){
             return repository.findByNomeFornecedorAndNomeStatusAndUserId( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getId());
         }else if (Objects.equals(new String("GERENTE"), new String(usuario.getRoles()))){
-            return repository.findByNomeFornecedorAndNomeStatusAndArea( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getArea());
-        }else if (Objects.equals(new String("COORDENADOR"), new String(usuario.getRoles()))){
             return repository.findByNomeFornecedorAndNomeStatusAndAreaAndNotGerente( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getArea());
+        }else if (Objects.equals(new String("COORDENADOR"), new String(usuario.getRoles()))){
+            return repository.findByNomeFornecedorAndNomeStatusAndAreaAndNotGerenteNotCoordenador( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getArea());
         }
         return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%");
     }
@@ -136,9 +136,60 @@ public class PagamentoController {
         repository.findById(id)
                 .map(pagamento -> {
                     pagamento.setTipoStatus(pagamentoAtualizado.getTipoStatus());
+                    pagamento.setTributo(pagamentoAtualizado.getTributo());
+                    pagamento.setDataEmissao(pagamentoAtualizado.getDataEmissao());
+                    pagamento.setDataVencimento(pagamentoAtualizado.getDataVencimento());
+                    pagamento.setNomeFornecedor(pagamentoAtualizado.getNomeFornecedor());
+                    pagamento.setObservacao(pagamentoAtualizado.getObservacao());
+                    pagamento.setDesconto(pagamentoAtualizado.getDesconto());
+                    pagamento.setValorBruto(pagamentoAtualizado.getValorBruto());
+                    pagamento.setValorLiquido(pagamentoAtualizado.getValorLiquido());
+                    pagamento.setCentroDeCusto(pagamentoAtualizado.getCentroDeCusto());
+                    pagamento.setTipoPedido(pagamentoAtualizado.getTipoPedido());
+                    pagamento.setTipoStatus(pagamentoAtualizado.getTipoStatus());
                     return repository.save(pagamentoAtualizado);
                 })
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @PutMapping("/atualizandoStatus/{id}/{tipoStatus}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void aprovarStatus(@PathVariable int id, @PathVariable int tipoStatus){
+        repository.aprovarStatus(id, tipoStatus);
+    }
+
+    @GetMapping("/teste")
+    public List<Pagamento> pesquisarMeusPedidos(
+            @RequestParam(value = "nomeFornecedor", required = false, defaultValue = "") String nomeForcenedor,
+            @RequestParam(value = "nomeStatus", required = false, defaultValue = "") String nomeStatus
+    ) {
+
+        // TODO: Passar para uma função global/compartilhada
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String username = "";
+
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        //
+
+        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+
+        if (Objects.equals(new String("USUARIO"), new String(usuario.getRoles()))){
+            return repository.findByNomeFornecedorAndNomeStatusAndUserId( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getId());
+        }else if (Objects.equals(new String("GERENTE"), new String(usuario.getRoles()))){
+            return repository.findByNomeFornecedorAndNomeStatusAndUserId( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getId());
+        }else if (Objects.equals(new String("COORDENADOR"), new String(usuario.getRoles()))){
+            return repository.findByNomeFornecedorAndNomeStatusAndUserId( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getId());
+        }else if (Objects.equals(new String("ASSISTENTE"), new String(usuario.getRoles()))) {
+            return repository.findByNomeFornecedorAndNomeStatusAndUserId("%" + nomeForcenedor + "%", "%" + nomeStatus + "%", usuario.getId());
+        }else if (Objects.equals(new String("DIRETOR"), new String(usuario.getRoles()))) {
+                return repository.findByNomeFornecedorAndNomeStatusAndUserId("%" + nomeForcenedor + "%", "%" + nomeStatus + "%", usuario.getId());
+        }
+                return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%");
     }
 
 }
