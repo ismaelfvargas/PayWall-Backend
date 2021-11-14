@@ -76,6 +76,9 @@ public class Pagamento {
     @NotEmpty(message = "campo centro de custo é obrigatorio")
     private String centroDeCusto;
 
+    @Column(name = "mensagem_reprovacao")
+    private String mensagemReprovacao;
+
     // inclui a data automatico
     @PrePersist
     public void insereDataAutomatico() {

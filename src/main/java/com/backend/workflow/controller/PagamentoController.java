@@ -158,6 +158,12 @@ public class PagamentoController {
         repository.aprovarStatus(id, tipoStatus);
     }
 
+    @PutMapping("/inserirMensagemReprovacao/{id}/{mensagemReprovacao}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void inserirMensagemReprovacao(@PathVariable int id, @PathVariable String mensagemReprovacao){
+        repository.inserirMensagemReprovacao(id, mensagemReprovacao);
+    }
+
     @GetMapping("/teste")
     public List<Pagamento> pesquisarMeusPedidos(
             @RequestParam(value = "nomeFornecedor", required = false, defaultValue = "") String nomeForcenedor,
@@ -191,5 +197,6 @@ public class PagamentoController {
         }
                 return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%");
     }
+
 
 }

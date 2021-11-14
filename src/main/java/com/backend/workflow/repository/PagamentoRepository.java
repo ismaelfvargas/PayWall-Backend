@@ -62,4 +62,11 @@ public interface PagamentoRepository extends JpaRepository<Pagamento, Integer> {
             @Param("id") Integer id,
             @Param("tipoStatus") Integer tipoStatus);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE Pagamento p set p.mensagemReprovacao = :mensagemReprovacao where p.id = :id")
+    void inserirMensagemReprovacao(
+            @Param("id") Integer id,
+            @Param("mensagemReprovacao") String mensagemReprovacao);
+
 }
