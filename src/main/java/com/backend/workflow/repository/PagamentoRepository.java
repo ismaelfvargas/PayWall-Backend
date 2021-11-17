@@ -54,7 +54,6 @@ public interface PagamentoRepository extends JpaRepository<Pagamento, Integer> {
             @Param("nomeStatus") String nomeStatus,
             @Param("area") String area);
 
-
     @Transactional
     @Modifying
     @Query("UPDATE Pagamento p set p.tipoStatus.id = :tipoStatus where p.id = :id")

@@ -3,7 +3,9 @@ package com.backend.workflow.controller;
 import com.backend.workflow.entity.FileDB;
 import com.backend.workflow.message.ResponseFile;
 import com.backend.workflow.message.ResponseMessage;
+import com.backend.workflow.repository.FileDBRepository;
 import com.backend.workflow.service.FileStorageService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
@@ -20,7 +23,10 @@ import java.util.stream.Collectors;
 @Controller
 @CrossOrigin("http://localhost:4200")
 @RequestMapping("")
+@RequiredArgsConstructor
 public class FileController {
+
+    private final FileDBRepository fileDBRepository;
 
     @Autowired
     private FileStorageService storageService;
@@ -65,5 +71,24 @@ public class FileController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
                 .body(fileDB.getData());
+    }
+
+    @GetMapping("/buscarDocumento/{idPagamento}")
+    public ResponseEntity<List<ResponseFile>> getDocumentos(@PathVariable Integer idPagamento ) {
+        List<ResponseFile> files = storageService.getDocumentos(idPagamento).map(dbFile -> {
+            String fileDownloadUri = ServletUriComponentsBuilder
+                    .fromCurrentContextPath()
+                    .path("/files/")
+                    .path(dbFile.getId())
+                    .toUriString();
+
+            return new ResponseFile(
+                    dbFile.getName(),
+                    fileDownloadUri,
+                    dbFile.getType(),
+                    dbFile.getData().length);
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK).body(files);
     }
 }
