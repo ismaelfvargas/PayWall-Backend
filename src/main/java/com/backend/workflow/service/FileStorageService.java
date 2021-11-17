@@ -31,4 +31,8 @@ public class FileStorageService {
     public Stream<FileDB> getAllFiles() {
         return fileDBRepository.findAll().stream();
     }
+
+    public Stream<FileDB> getDocumentos(Integer idPagamento) {
+        return fileDBRepository.findByIdPagamento(idPagamento).stream();
+    }
 }
