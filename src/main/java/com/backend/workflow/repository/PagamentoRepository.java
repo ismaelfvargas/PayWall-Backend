@@ -41,15 +41,22 @@ public interface PagamentoRepository extends JpaRepository<Pagamento, Integer> {
             @Param("area") String area);
 
     @Query( "select s from Pagamento s join fetch s.tipoStatus t join fetch s.usuario u " +
-            "where upper( s.nomeFornecedor ) like upper( :nomeFornecedor ) and upper( t.nomeStatus ) like upper( :nomeStatus ) and u.area = :area and u.roles <> 'GERENTE' and u.roles <> 'COODENADOR' ")
-    List<Pagamento> findByNomeFornecedorAndNomeStatusAndAreaAndNotGerenteNotCoordenador(
+            "where upper( s.nomeFornecedor ) like upper( :nomeFornecedor ) and upper( t.nomeStatus ) like upper( :nomeStatus ) and u.area = :area and u.roles <> 'GERENTE' and u.roles <> 'COORDENADOR' and u.roles <> 'DIRETOR' ")
+    List<Pagamento> findByNomeFornecedorAndNomeStatusAndAreaAndNotGerenteNotCoordenadorNotDiretor(
             @Param("nomeFornecedor") String nomeFornecedor,
             @Param("nomeStatus") String nomeStatus,
             @Param("area") String area);
 
+//    @Query( "select s from Pagamento s join fetch s.tipoStatus t join fetch s.usuario u " +
+//            "where upper( s.nomeFornecedor ) like upper( :nomeFornecedor ) and upper( t.nomeStatus ) like upper( :nomeStatus ) and u.area = :area and u.roles <> 'GERENTE' ")
+//    List<Pagamento> findByNomeFornecedorAndNomeStatusAndAreaAndNotGerente(
+//            @Param("nomeFornecedor") String nomeFornecedor,
+//            @Param("nomeStatus") String nomeStatus,
+//            @Param("area") String area);
+
     @Query( "select s from Pagamento s join fetch s.tipoStatus t join fetch s.usuario u " +
-            "where upper( s.nomeFornecedor ) like upper( :nomeFornecedor ) and upper( t.nomeStatus ) like upper( :nomeStatus ) and u.area = :area and u.roles <> 'GERENTE' ")
-    List<Pagamento> findByNomeFornecedorAndNomeStatusAndAreaAndNotGerente(
+            "where upper( s.nomeFornecedor ) like upper( :nomeFornecedor ) and upper( t.nomeStatus ) like upper( :nomeStatus ) and u.area = :area and u.roles <> 'GERENTE' and u.roles <> 'DIRETOR' ")
+    List<Pagamento> findByNomeFornecedorAndNomeStatusAndAreaAndNotGerenteAndNotDiretor(
             @Param("nomeFornecedor") String nomeFornecedor,
             @Param("nomeStatus") String nomeStatus,
             @Param("area") String area);
