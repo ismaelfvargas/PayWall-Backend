@@ -112,10 +112,11 @@ public class PagamentoController {
         if (Objects.equals(new String("USUARIO"), new String(usuario.getRoles()))){
             return repository.findByNomeFornecedorAndNomeStatusAndUserId( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getId());
         }else if (Objects.equals(new String("GERENTE"), new String(usuario.getRoles()))){
-            return repository.findByNomeFornecedorAndNomeStatusAndAreaAndNotGerente( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getArea());
+            return repository.findByNomeFornecedorAndNomeStatusAndAreaAndNotGerenteAndNotDiretor( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getArea());
         }else if (Objects.equals(new String("COORDENADOR"), new String(usuario.getRoles()))){
-            return repository.findByNomeFornecedorAndNomeStatusAndAreaAndNotGerenteNotCoordenador( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getArea());
+            return repository.findByNomeFornecedorAndNomeStatusAndAreaAndNotGerenteNotCoordenadorNotDiretor( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getArea());
         }
+
         return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%");
     }
 
