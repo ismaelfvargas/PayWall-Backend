@@ -2,14 +2,8 @@ package com.backend.workflow.controller;
 
 
 import com.backend.workflow.dto.PagamentoDTO;
-import com.backend.workflow.entity.Pagamento;
-import com.backend.workflow.entity.TipoPedido;
-import com.backend.workflow.entity.TipoStatus;
-import com.backend.workflow.entity.Usuario;
-import com.backend.workflow.repository.PagamentoRepository;
-import com.backend.workflow.repository.TipoPedidoRepository;
-import com.backend.workflow.repository.TipoStatusRepository;
-import com.backend.workflow.repository.UsuarioRepository;
+import com.backend.workflow.entity.*;
+import com.backend.workflow.repository.*;
 import com.backend.workflow.util.BigDecimalConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Slf4j
@@ -35,6 +30,7 @@ public class PagamentoController {
     private final TipoStatusRepository tipoStatusRepository;
     private final BigDecimalConverter bigDecimalConverter;
     private final UsuarioRepository usuarioRepository;
+    private final TipoStatusAdtoRepository tipoStatusAdtoRepository;
 
 
     @PostMapping
@@ -71,6 +67,7 @@ public class PagamentoController {
         );
 
 
+
         Pagamento pagamento = new Pagamento();
         pagamento.setTributo(dto.getTributo());
         pagamento.setDataCadastro(dto.getDataCadastro());
@@ -85,6 +82,15 @@ public class PagamentoController {
         pagamento.setTipoPedido(tipoPedido);
         pagamento.setTipoStatus(tipoStatus);
         pagamento.setUsuario(usuario);
+
+        if (idTipoPedido == 2) {
+            TipoStatusAdto tipoStatusAdto = tipoStatusAdtoRepository.findById(1).orElseThrow(() ->
+                    new ResponseStatusException(
+                            HttpStatus.BAD_REQUEST, "Tipo do status inexistente"
+                    )
+            );
+            pagamento.setTipoStatusAdto(tipoStatusAdto);
+        }
 
         return repository.save(pagamento);
     }
@@ -156,6 +162,12 @@ public class PagamentoController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void aprovarStatus(@PathVariable int id, @PathVariable int tipoStatus){
         repository.aprovarStatus(id, tipoStatus);
+    }
+
+    @PutMapping("/atualizandoStatusAdto/{id}/{tipoStatusAdto}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void alterarStatusAdto(@PathVariable int id, @PathVariable int tipoStatusAdto){
+        repository.alterarStatusAdto(id, tipoStatusAdto);
     }
 
     @PutMapping("/inserirMensagemReprovacao/{id}/{mensagemReprovacao}")
