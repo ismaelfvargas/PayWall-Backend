@@ -210,5 +210,15 @@ public class PagamentoController {
                 return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%");
     }
 
-
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar( @PathVariable Integer id ){
+        repository
+                .findById(id)
+                .map( pagamento -> {
+                    repository.delete(pagamento);
+                    return Void.TYPE;
+                })
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pagamento não encontrado") );
+    }
 }
