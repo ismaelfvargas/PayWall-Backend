@@ -72,6 +72,10 @@ public class Pagamento {
     @JoinColumn(name="id_tipo_status")
     TipoStatus tipoStatus;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name="id_tipo_status_adto")
+    TipoStatusAdto tipoStatusAdto;
+
     @Column(name = "centro_custo")
     @NotEmpty(message = "campo centro de custo é obrigatorio")
     private String centroDeCusto;
