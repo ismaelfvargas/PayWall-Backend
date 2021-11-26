@@ -1,53 +1,63 @@
 package com.backend.workflow.service;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
 
-import com.backend.workflow.entity.EmailModel;
-import com.backend.workflow.enums.StatusEmail;
-import com.backend.workflow.repository.EmailRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
-
-@Service
 public class EmailService {
 
-    @Autowired
-    EmailRepository emailRepository;
+    public boolean sendEmail(String subject, String message, String to)
+    {
+        boolean foo = false; // Set the false, default variable "foo", we will allow it after sending code process email
 
-    @Autowired
-    private JavaMailSender emailSender;
+        String senderEmail = ""; // your gmail email id
+        String senderPassword = ""; // your gmail id password
 
-    public EmailModel sendEmail(EmailModel emailModel) {
-        emailModel.setSendDateEmail(LocalDateTime.now());
-        try{
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(emailModel.getEmailFrom());
-            message.setTo(emailModel.getEmailTo());
-            message.setSubject(emailModel.getSubject());
-            message.setText(emailModel.getText());
-            emailSender.send(message);
+        // Properties class enables us to connect to the host SMTP server
+        Properties properties = new Properties();
 
-            emailModel.setStatusEmail(StatusEmail.SENT);
-        } catch (MailException e){
-            emailModel.setStatusEmail(StatusEmail.ERROR);
-        } finally {
-            return emailRepository.save(emailModel);
+        // Setting necessary information for object property
+
+        // Setup host and mail server
+        properties.put("mail.smtp.auth", "true"); // enable authentication
+        properties.put("mail.smtp.starttls.enable", "true"); // enable TLS-protected connection
+        properties.put("mail.smtp.host", "smtp.gmail.com"); // Mention the SMTP server address. Here Gmail's SMTP server is being used to send email
+        properties.put("mail.smtp.port", "587"); // 587 is TLS port number
+
+        // get the session object and pass username and password
+        Session session = Session.getDefaultInstance(properties,
+                new Authenticator()
+                {
+                    protected PasswordAuthentication getPasswordAuthentication(){
+
+                        return new PasswordAuthentication(senderEmail, senderPassword);
+                    }
+                });
+
+        try {
+
+            MimeMessage msg = new MimeMessage(session); // Create a default MimeMessage object for compose the message
+
+            msg.setFrom(new InternetAddress(senderEmail)); // adding sender email id to msg object
+
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(to)); // adding recipient to msg object
+
+            msg.setSubject(subject); // adding subject to msg object
+            msg.setText(message); // adding text to msg object
+
+            Transport.send(msg); // Transport class send the message using send() method
+            System.out.println("Email Sent Wtih Attachment Successfully...");
+
+            foo = true; // Set the "foo" variable to true after successfully sending emails
+
+        }catch(Exception e){
+
+            System.out.println("EmailService File Error"+ e);
         }
+
+        return foo; // and return foo variable
     }
 
-    public Page<EmailModel> findAll(Pageable pageable) {
-        return  emailRepository.findAll(pageable);
-    }
 
-    public Optional<EmailModel> findById(UUID emailId) {
-        return emailRepository.findById(emailId);
-    }
 }

@@ -56,7 +56,7 @@ public class Pagamento {
     @Column(length = 11)
     private String tributo;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_usuario")
     Usuario usuario;
 
@@ -64,15 +64,15 @@ public class Pagamento {
 //    @JoinColumn(name="id_centro_custo")
 //    CentroCusto centroCusto;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="tipo_pedido")
     TipoPedido tipoPedido;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_tipo_status")
     TipoStatus tipoStatus;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_tipo_status_adto")
     TipoStatusAdto tipoStatusAdto;
 
