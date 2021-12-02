@@ -12,13 +12,6 @@ import java.util.List;
 
 public interface PagamentoRepository extends JpaRepository<Pagamento, Integer> {
 
-//    @Query( "select s from Pagamento s join s.tipoPedido c " +
-//            "join s.tipoStatus x " +
-//            "where upper( c.nomePedido ) like upper( :nomePedido ) " +
-//            "and upper( s.nomeFornecedor ) like upper( :nomeFornecedor )" +
-//            "and upper( x.nomeStatus ) like upper( :nomeStatus )")
-//    List<Pagamento> findByNomeFornecedorAndNomePedido(
-//            @Param("nomePedido") String nomePedido, @Param("nomeFornecedor") String nomeFornecedor, @Param("nomeStatus") String nomeStatus);
 
     @Query( "select s from Pagamento s join fetch s.tipoStatus t " +
             "where upper( s.nomeFornecedor ) like upper( :nomeFornecedor ) and upper( t.nomeStatus ) like upper( :nomeStatus )" )
@@ -81,5 +74,9 @@ public interface PagamentoRepository extends JpaRepository<Pagamento, Integer> {
     void inserirMensagemReprovacao(
             @Param("id") Integer id,
             @Param("mensagemReprovacao") String mensagemReprovacao);
+
+
+    @Query("select p.tipoPedido.nomePedido, p.dataVencimento, count(p.id) from Pagamento p group by p.tipoPedido.nomePedido, p.dataVencimento order by p.dataVencimento asc")
+    List<Object[]> queryDashboard();
 
 }

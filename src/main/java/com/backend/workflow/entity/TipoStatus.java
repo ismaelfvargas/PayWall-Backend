@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
+@Table(name = "status_solicitacoes")
 public class TipoStatus {
 
     @Id

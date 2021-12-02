@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.PrePersist;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -19,12 +20,11 @@ public class PagamentoDTO {
     private Date dataVencimento;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dataEmissao;
-    private String valorBruto;
-    private String valorLiquido;
-    private String desconto;
-    private String tributo;
+    private BigDecimal valorBruto;
+    private BigDecimal valorLiquido;
+    private BigDecimal desconto;
+    private BigDecimal tributo;
     private String centroDeCusto;
-    private Integer idCentroDeCusto;
     private Integer idUsuario;
     private Integer idTipoPedido;
     private Integer idTipoStatus;

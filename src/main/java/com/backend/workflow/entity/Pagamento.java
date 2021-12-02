@@ -7,7 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -17,12 +20,12 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 
-@Table(name = "pedido")
+@Table(name = "pedidos")
 public class Pagamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_pagamento")
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "nome_fornecedor", nullable = false, length = 50)
@@ -44,17 +47,24 @@ public class Pagamento {
     private Date dataEmissao;
 
     @Column(name = "valor_bruto")
-    private String valorBruto;
+    @DecimalMin(value = "0.0", inclusive = false)
+    @Digits(integer=19, fraction=2)
+    private BigDecimal valorBruto;
 
     @Column(name = "valor_liquido", nullable = false)
-    @NotEmpty(message = "campo valor líquido é obrigatorio")
-    private String valorLiquido;
+    @DecimalMin(value = "0.0", inclusive = false)
+    @Digits(integer=19, fraction=2)
+    private BigDecimal valorLiquido;
 
     @Column(name = "desconto", length = 11)
-    private String desconto;
+    @DecimalMin(value = "0.0", inclusive = false)
+    @Digits(integer=19, fraction=2)
+    private BigDecimal desconto;
 
     @Column(length = 11)
-    private String tributo;
+    @DecimalMin(value = "0.0", inclusive = false)
+    @Digits(integer=19, fraction=2)
+    private BigDecimal tributo;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_usuario")

@@ -7,6 +7,7 @@ import com.backend.workflow.repository.*;
 import com.backend.workflow.util.BigDecimalConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -221,4 +222,11 @@ public class PagamentoController {
                 })
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pagamento não encontrado") );
     }
+
+    @GetMapping("/dashboard")
+    public List<Object[]> dashboard(){
+        return repository.queryDashboard();
+    }
+
+
 }
