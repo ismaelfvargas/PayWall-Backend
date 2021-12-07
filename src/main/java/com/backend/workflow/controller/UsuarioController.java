@@ -91,4 +91,31 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("/permissao/administrador")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void permissaoAdministrador(){
+
+        // TODO: Passar para uma função global/compartilhada
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String username = "";
+
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        //
+
+        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+
+        String adminRole = usuario.getRoles();
+        String administrador = "ADMINISTRADOR";
+
+
+        if( (!Objects.equals(new String(adminRole), new String(administrador)))){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 }
