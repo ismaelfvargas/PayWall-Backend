@@ -10,8 +10,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 @RestController
@@ -26,9 +28,19 @@ public class UsuarioController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void salvar(@RequestBody @Valid Usuario usuario){
-        try{
+        try {
+            MessageDigest algoritmo;
+            byte messageDigest[];
+            StringBuilder hexString;
+            algoritmo = MessageDigest.getInstance("MD5");  // 32 letras
+            messageDigest = algoritmo.digest(usuario.getPassword().getBytes("UTF-8"));
+            hexString = new StringBuilder();
+            for (byte b : messageDigest) {
+                hexString.append(String.format("%02X", 0xFF & b));
+            }
+            usuario.setPassword(hexString.toString());
             service.salvar(usuario);
-        }catch (UsuarioCadastradoException e){
+        } catch (UsuarioCadastradoException | NoSuchAlgorithmException | UnsupportedEncodingException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
