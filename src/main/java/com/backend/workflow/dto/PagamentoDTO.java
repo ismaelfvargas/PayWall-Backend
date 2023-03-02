@@ -3,7 +3,6 @@ package com.backend.workflow.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.PrePersist;
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -20,5 +20,4 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 //.antMatchers("/pagamentos/**").authenticated()
                 .anyRequest().denyAll();
     }
-
 }

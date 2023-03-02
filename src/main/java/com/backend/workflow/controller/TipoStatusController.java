@@ -33,7 +33,6 @@ public class TipoStatusController {
     public TipoStatus acharPorId( @PathVariable Integer id ){
         return repository
                 .findById(id)
-                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Status não encontrado") );
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Status não encontrado"));
     }
-
 }

@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -78,5 +77,4 @@ public interface PagamentoRepository extends JpaRepository<Pagamento, Integer> {
 
     @Query("select p.tipoPedido.nomePedido, p.dataVencimento, count(p.id) from Pagamento p group by p.tipoPedido.nomePedido, p.dataVencimento order by p.dataVencimento asc")
     List<Object[]> queryDashboard();
-
 }

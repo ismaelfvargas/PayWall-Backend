@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
@@ -98,5 +97,4 @@ public class Pagamento {
     public void insereDataAutomatico() {
         setDataCadastro(LocalDate.now());
     }
-
 }

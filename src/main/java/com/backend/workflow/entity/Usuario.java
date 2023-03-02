@@ -2,11 +2,9 @@ package com.backend.workflow.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -35,5 +33,4 @@ public class Usuario {
     @Column(nullable = false)
     @NotEmpty(message = "{O campo area é obrigatório}")
     private String area;
-
 }
