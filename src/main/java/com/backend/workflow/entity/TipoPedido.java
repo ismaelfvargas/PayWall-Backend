@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @Entity
@@ -21,5 +20,4 @@ public class TipoPedido {
 
     @Column(name = "nome_pedido", nullable = false)
     private String nomePedido;
-
 }

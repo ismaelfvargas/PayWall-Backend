@@ -1,12 +1,12 @@
 package com.backend.workflow.entity;
 
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "files")
 public class FileDB {
+
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")

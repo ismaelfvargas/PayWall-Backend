@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -33,6 +32,6 @@ public class TipoStatusAdtoController {
     public TipoStatusAdto acharPorId( @PathVariable Integer id ){
         return repository
                 .findById(id)
-                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Status não encontrado") );
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Status não encontrado"));
     }
 }

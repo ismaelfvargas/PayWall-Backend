@@ -58,6 +58,4 @@ public class EmailService {
 
         return foo; // and return foo variable
     }
-
-
 }
