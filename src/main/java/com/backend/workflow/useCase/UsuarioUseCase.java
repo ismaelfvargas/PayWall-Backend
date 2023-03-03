@@ -1,18 +1,15 @@
 package com.backend.workflow.useCase;
 
 import com.backend.workflow.entity.Usuario;
-import com.backend.workflow.exception.UsuarioCadastradoException;
 import com.backend.workflow.repository.UsuarioRepository;
 import com.backend.workflow.service.UsuarioService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 @Service
@@ -24,21 +21,10 @@ public class UsuarioUseCase {
 
     public void salvar(Usuario usuario){
 
-        try {
-            MessageDigest algoritmo;
-            byte messageDigest[];
-            StringBuilder hexString;
-            algoritmo = MessageDigest.getInstance("MD5");  // 32 letras
-            messageDigest = algoritmo.digest(usuario.getPassword().getBytes("UTF-8"));
-            hexString = new StringBuilder();
-            for (byte b : messageDigest) {
-                hexString.append(String.format("%02X", 0xFF & b));
-            }
-            usuario.setPassword(hexString.toString());
+            BCryptPasswordEncoder criptografar = new BCryptPasswordEncoder();
+            String senhaCriptografada = criptografar.encode(usuario.getPassword());
+            usuario.setPassword(senhaCriptografada);
             service.salvar(usuario);
-        } catch (UsuarioCadastradoException | NoSuchAlgorithmException | UnsupportedEncodingException e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
     }
 
     public void permissao(){
