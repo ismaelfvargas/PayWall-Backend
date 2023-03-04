@@ -1,7 +1,10 @@
 package com.backend.workflow.useCase;
 
+import com.backend.workflow.dto.UsuarioDTO;
+import com.backend.workflow.entity.Cargo;
 import com.backend.workflow.entity.Usuario;
 import com.backend.workflow.repository.UsuarioRepository;
+import com.backend.workflow.service.CargoService;
 import com.backend.workflow.service.UsuarioService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,13 +21,21 @@ public class UsuarioUseCase {
 
     private final UsuarioService service;
     private final UsuarioRepository usuarioRepository;
+    private final CargoService cargoService;
 
-    public void salvar(Usuario usuario){
+    public void salvar(UsuarioDTO dto){
+            service.salvar(newUser(dto));
+    }
 
-            BCryptPasswordEncoder criptografar = new BCryptPasswordEncoder();
-            String senhaCriptografada = criptografar.encode(usuario.getPassword());
-            usuario.setPassword(senhaCriptografada);
-            service.salvar(usuario);
+    private Usuario newUser(UsuarioDTO dto){
+        Usuario usuario = new Usuario();
+        Cargo cargo = cargoService.get(dto.getCargoId());
+        BCryptPasswordEncoder criptografar = new BCryptPasswordEncoder();
+        String senhaCriptografada = criptografar.encode(dto.getPassword());
+        usuario.setPassword(senhaCriptografada);
+        usuario.setUsername(dto.getUsername());
+        usuario.setCargo(cargo);
+        return usuario;
     }
 
     public void permissao(){
@@ -42,7 +53,7 @@ public class UsuarioUseCase {
 
         Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
-        String adminRole = usuario.getRoles();
+        String adminRole = usuario.getCargo().getRoles();
         String gerente = "GERENTE";
         String coordenador = "COORDENADOR";
         String diretor = "DIRETOR";
@@ -70,7 +81,7 @@ public class UsuarioUseCase {
 
         Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
-        String adminRole = usuario.getRoles();
+        String adminRole = usuario.getCargo().getRoles();
         String assistente = "ASSISTENTE";
 
         if( (!Objects.equals(new String(adminRole), new String(assistente)))){
@@ -94,7 +105,7 @@ public class UsuarioUseCase {
 
         Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
-        String adminRole = usuario.getRoles();
+        String adminRole = usuario.getCargo().getRoles();
         String administrador = "ADMINISTRADOR";
 
         if( (!Objects.equals(new String(adminRole), new String(administrador)))){

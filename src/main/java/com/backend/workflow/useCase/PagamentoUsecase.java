@@ -3,7 +3,6 @@ package com.backend.workflow.useCase;
 import com.backend.workflow.dto.PagamentoDTO;
 import com.backend.workflow.entity.*;
 import com.backend.workflow.repository.*;
-import com.backend.workflow.util.BigDecimalConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -82,7 +81,7 @@ public class PagamentoUsecase {
         return repository.save(pagamento);
     }
 
-    public List<Pagamento> pesquisar(String nomeForcenedor, String nomeStatus) {
+    public List<Pagamento> pesquisar(String nomeFornecedor, String nomeStatus) {
 
         // TODO: Passar para uma função global/compartilhada
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -98,15 +97,15 @@ public class PagamentoUsecase {
 
         Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
-        if (Objects.equals(new String("USUARIO"), new String(usuario.getRoles()))){
-            return repository.findByNomeFornecedorAndNomeStatusAndUserId( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getId());
-        }else if (Objects.equals(new String("GERENTE"), new String(usuario.getRoles()))){
-            return repository.findByNomeFornecedorAndNomeStatusAndAreaAndNotGerenteAndNotDiretor( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getArea());
-        }else if (Objects.equals(new String("COORDENADOR"), new String(usuario.getRoles()))){
-            return repository.findByNomeFornecedorAndNomeStatusAndAreaAndNotGerenteNotCoordenadorNotDiretor( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getArea());
+        if (Objects.equals(new String("USUARIO"), new String(usuario.getCargo().getRoles()))){
+            return repository.findByNomeFornecedorAndNomeStatusAndUserId( "%" + nomeFornecedor + "%",   "%" + nomeStatus + "%", usuario.getId());
+        }else if (Objects.equals(new String("GERENTE"), new String(usuario.getCargo().getRoles()))){
+            return repository.findByNomeFornecedorAndNomeStatusAndAreaAndNotGerenteAndNotDiretor( "%" + nomeFornecedor + "%",   "%" + nomeStatus + "%", usuario.getCargo().getArea());
+        }else if (Objects.equals(new String("COORDENADOR"), new String(usuario.getCargo().getRoles()))){
+            return repository.findByNomeFornecedorAndNomeStatusAndAreaAndNotGerenteNotCoordenadorNotDiretor( "%" + nomeFornecedor + "%",   "%" + nomeStatus + "%", usuario.getCargo().getArea());
         }
 
-        return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%");
+        return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeFornecedor + "%",   "%" + nomeStatus + "%");
     }
 
     public void atualizar(Integer id, Pagamento pagamentoAtualizado) {
@@ -145,15 +144,15 @@ public class PagamentoUsecase {
 
         Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
-        if (Objects.equals(new String("USUARIO"), new String(usuario.getRoles()))){
+        if (Objects.equals(new String("USUARIO"), new String(usuario.getCargo().getRoles()))){
             return repository.findByNomeFornecedorAndNomeStatusAndUserId( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getId());
-        }else if (Objects.equals(new String("GERENTE"), new String(usuario.getRoles()))){
+        }else if (Objects.equals(new String("GERENTE"), new String(usuario.getCargo().getRoles()))){
             return repository.findByNomeFornecedorAndNomeStatusAndUserId( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getId());
-        }else if (Objects.equals(new String("COORDENADOR"), new String(usuario.getRoles()))){
+        }else if (Objects.equals(new String("COORDENADOR"), new String(usuario.getCargo().getRoles()))){
             return repository.findByNomeFornecedorAndNomeStatusAndUserId( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getId());
-        }else if (Objects.equals(new String("ASSISTENTE"), new String(usuario.getRoles()))) {
+        }else if (Objects.equals(new String("ASSISTENTE"), new String(usuario.getCargo().getRoles()))) {
             return repository.findByNomeFornecedorAndNomeStatusAndUserId("%" + nomeForcenedor + "%", "%" + nomeStatus + "%", usuario.getId());
-        }else if (Objects.equals(new String("DIRETOR"), new String(usuario.getRoles()))) {
+        }else if (Objects.equals(new String("DIRETOR"), new String(usuario.getCargo().getRoles()))) {
             return repository.findByNomeFornecedorAndNomeStatusAndUserId("%" + nomeForcenedor + "%", "%" + nomeStatus + "%", usuario.getId());
         }
         return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%");
