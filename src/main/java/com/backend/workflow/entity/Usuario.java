@@ -26,11 +26,8 @@ public class Usuario {
     @NotEmpty(message = "{O campo senha é obrigatório}")
     private String password;
 
-    @Column(nullable = false)
-    @NotEmpty(message = "{O campo role é obrigatório}")
-    private String roles;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="cargo_id")
+   private Cargo cargo;
 
-    @Column(nullable = false)
-    @NotEmpty(message = "{O campo area é obrigatório}")
-    private String area;
 }

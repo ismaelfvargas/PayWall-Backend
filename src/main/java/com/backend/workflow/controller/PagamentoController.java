@@ -32,9 +32,9 @@ public class PagamentoController {
 
     @GetMapping
     public List<Pagamento> pesquisar(
-        @RequestParam(value = "nomeFornecedor", required = false, defaultValue = "") String nomeForcenedor,
+        @RequestParam(value = "nomeFornecedor", required = false, defaultValue = "") String nomeFornecedor,
         @RequestParam(value = "nomeStatus", required = false, defaultValue = "") String nomeStatus){
-        return usecase.pesquisar(nomeForcenedor, nomeStatus);
+        return usecase.pesquisar(nomeFornecedor, nomeStatus);
     }
 
     // metodo para achar um pagamento pelo ID, depois exception para caso não exista o ID (Postman)

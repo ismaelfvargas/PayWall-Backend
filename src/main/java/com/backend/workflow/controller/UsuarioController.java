@@ -1,6 +1,6 @@
 package com.backend.workflow.controller;
 
-import com.backend.workflow.entity.Usuario;
+import com.backend.workflow.dto.UsuarioDTO;
 import com.backend.workflow.useCase.UsuarioUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,8 +18,8 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void salvar(@RequestBody @Valid Usuario usuario){
-        useCase.salvar(usuario);
+    public void salvar(@RequestBody @Valid UsuarioDTO dto){
+        useCase.salvar(dto);
     }
 
     @GetMapping("/permissao/menu")
