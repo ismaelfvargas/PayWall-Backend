@@ -42,7 +42,7 @@ public class UsuarioUseCase {
         return usuario;
     }
 
-    private boolean permissaoCriarUsuario(UsuarioDTO dto){
+    private void permissaoCriarUsuario(UsuarioDTO dto){
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = "";
@@ -65,7 +65,6 @@ public class UsuarioUseCase {
         if((!Objects.equals(usuarioRole, role)) && (!Objects.equals(usuarioRole, PerfisFuncoesEnum.ADMINISTRATIVE.getId()))){
             throw new NotAuthorizedException(MessagesComponent.get("search.NotAuthorized.exception.for.the.area"));
         }
-        return false;
     }
 
     public void permissao(){
