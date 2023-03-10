@@ -3,6 +3,9 @@ package com.backend.workflow.useCase;
 import com.backend.workflow.dto.UsuarioDTO;
 import com.backend.workflow.entity.Cargo;
 import com.backend.workflow.entity.Usuario;
+import com.backend.workflow.enums.PerfisFuncoesEnum;
+import com.backend.workflow.exception.NotAuthorizedException;
+import com.backend.workflow.message.MessagesComponent;
 import com.backend.workflow.repository.UsuarioRepository;
 import com.backend.workflow.service.CargoService;
 import com.backend.workflow.service.UsuarioService;
@@ -24,10 +27,11 @@ public class UsuarioUseCase {
     private final CargoService cargoService;
 
     public void salvar(UsuarioDTO dto){
-            service.salvar(newUser(dto));
+            permissaoCriarUsuario(dto);
+            service.salvar(criarUsuario(dto));
     }
 
-    private Usuario newUser(UsuarioDTO dto){
+    private Usuario criarUsuario(UsuarioDTO dto){
         Usuario usuario = new Usuario();
         Cargo cargo = cargoService.get(dto.getCargoId());
         BCryptPasswordEncoder criptografar = new BCryptPasswordEncoder();
@@ -36,6 +40,32 @@ public class UsuarioUseCase {
         usuario.setUsername(dto.getUsername());
         usuario.setCargo(cargo);
         return usuario;
+    }
+
+    private boolean permissaoCriarUsuario(UsuarioDTO dto){
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = "";
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+        String usuarioCargo = usuario.getCargo().getRoles();
+        String usuarioRole = usuario.getCargo().getArea();
+
+        Cargo cargo = cargoService.get(dto.getCargoId());
+        String role = cargo.getArea();
+
+        if (!Objects.equals(usuarioCargo, PerfisFuncoesEnum.MANAGER.getId()) && (!Objects.equals(usuarioCargo, PerfisFuncoesEnum.ADMINISTRATIVE.getId()))){
+            throw new NotAuthorizedException();
+        }
+        if((!Objects.equals(usuarioRole, role)) && (!Objects.equals(usuarioRole, PerfisFuncoesEnum.ADMINISTRATIVE.getId()))){
+            throw new NotAuthorizedException(MessagesComponent.get("search.NotAuthorized.exception.for.the.area"));
+        }
+        return false;
     }
 
     public void permissao(){
