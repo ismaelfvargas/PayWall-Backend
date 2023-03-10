@@ -15,4 +15,8 @@ public class CargoService {
     public Cargo get(Long id){
         return repository.findById(id).get();
     }
+
+    public Cargo findByArea(String area){
+        return repository.findByArea(area).get();
+    }
 }
