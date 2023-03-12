@@ -1,6 +1,6 @@
 package com.backend.workflow.useCase;
 
-import com.backend.workflow.dto.PagamentoDTO;
+import com.backend.workflow.dto.PedidoDTO;
 import com.backend.workflow.entity.*;
 import com.backend.workflow.repository.*;
 import lombok.AllArgsConstructor;
@@ -15,15 +15,15 @@ import java.util.Objects;
 
 @AllArgsConstructor
 @Service
-public class PagamentoUsecase {
+public class PedidoUsecase {
 
-    private final PagamentoRepository repository;
+    private final PedidoRepository repository;
     private final TipoPedidoRepository tipoPedidoRepository;
     private final TipoStatusRepository tipoStatusRepository;
     private final UsuarioRepository usuarioRepository;
     private final TipoStatusAdtoRepository tipoStatusAdtoRepository;
 
-    public Pagamento salvar (PagamentoDTO dto){
+    public Pedido salvar (PedidoDTO dto){
 
         // TODO: Passar para uma função global/compartilhada
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -54,20 +54,20 @@ public class PagamentoUsecase {
                 )
         );
 
-        Pagamento pagamento = new Pagamento();
-        pagamento.setTributo(dto.getTributo());
-        pagamento.setDataCadastro(dto.getDataCadastro());
-        pagamento.setDataEmissao(dto.getDataEmissao());
-        pagamento.setDataVencimento(dto.getDataVencimento());
-        pagamento.setNomeFornecedor(dto.getNomeFornecedor());
-        pagamento.setObservacao(dto.getObservacao());
-        pagamento.setDesconto(dto.getDesconto());
-        pagamento.setValorBruto(dto.getValorBruto());
-        pagamento.setValorLiquido(dto.getValorLiquido());
-        pagamento.setCentroDeCusto(dto.getCentroDeCusto());
-        pagamento.setTipoPedido(tipoPedido);
-        pagamento.setTipoStatus(tipoStatus);
-        pagamento.setUsuario(usuario);
+        Pedido pedido = new Pedido();
+        pedido.setTributo(dto.getTributo());
+        pedido.setDataCadastro(dto.getDataCadastro());
+        pedido.setDataEmissao(dto.getDataEmissao());
+        pedido.setDataVencimento(dto.getDataVencimento());
+        pedido.setNomeFornecedor(dto.getNomeFornecedor());
+        pedido.setObservacao(dto.getObservacao());
+        pedido.setDesconto(dto.getDesconto());
+        pedido.setValorBruto(dto.getValorBruto());
+        pedido.setValorLiquido(dto.getValorLiquido());
+        pedido.setCentroDeCusto(dto.getCentroDeCusto());
+        pedido.setTipoPedido(tipoPedido);
+        pedido.setTipoStatus(tipoStatus);
+        pedido.setUsuario(usuario);
 
         if (idTipoPedido == 2) {
             TipoStatusAdto tipoStatusAdto = tipoStatusAdtoRepository.findById(1).orElseThrow(() ->
@@ -75,13 +75,13 @@ public class PagamentoUsecase {
                             HttpStatus.BAD_REQUEST, "Tipo do status inexistente"
                     )
             );
-            pagamento.setTipoStatusAdto(tipoStatusAdto);
+            pedido.setTipoStatusAdto(tipoStatusAdto);
         }
 
-        return repository.save(pagamento);
+        return repository.save(pedido);
     }
 
-    public List<Pagamento> pesquisar(String nomeFornecedor, String nomeStatus) {
+    public List<Pedido> pesquisar(String nomeFornecedor, String nomeStatus) {
 
         // TODO: Passar para uma função global/compartilhada
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -108,27 +108,27 @@ public class PagamentoUsecase {
         return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeFornecedor + "%",   "%" + nomeStatus + "%");
     }
 
-    public void atualizar(Integer id, Pagamento pagamentoAtualizado) {
+    public void atualizar(Integer id, Pedido pedidoAtualizado) {
         repository.findById(id)
-                .map(pagamento -> {
-                    pagamento.setTipoStatus(pagamentoAtualizado.getTipoStatus());
-                    pagamento.setTributo(pagamentoAtualizado.getTributo());
-                    pagamento.setDataEmissao(pagamentoAtualizado.getDataEmissao());
-                    pagamento.setDataVencimento(pagamentoAtualizado.getDataVencimento());
-                    pagamento.setNomeFornecedor(pagamentoAtualizado.getNomeFornecedor());
-                    pagamento.setObservacao(pagamentoAtualizado.getObservacao());
-                    pagamento.setDesconto(pagamentoAtualizado.getDesconto());
-                    pagamento.setValorBruto(pagamentoAtualizado.getValorBruto());
-                    pagamento.setValorLiquido(pagamentoAtualizado.getValorLiquido());
-                    pagamento.setCentroDeCusto(pagamentoAtualizado.getCentroDeCusto());
-                    pagamento.setTipoPedido(pagamentoAtualizado.getTipoPedido());
-                    pagamento.setTipoStatus(pagamentoAtualizado.getTipoStatus());
-                    return repository.save(pagamentoAtualizado);
+                .map(pedido -> {
+                    pedido.setTipoStatus(pedidoAtualizado.getTipoStatus());
+                    pedido.setTributo(pedidoAtualizado.getTributo());
+                    pedido.setDataEmissao(pedidoAtualizado.getDataEmissao());
+                    pedido.setDataVencimento(pedidoAtualizado.getDataVencimento());
+                    pedido.setNomeFornecedor(pedidoAtualizado.getNomeFornecedor());
+                    pedido.setObservacao(pedidoAtualizado.getObservacao());
+                    pedido.setDesconto(pedidoAtualizado.getDesconto());
+                    pedido.setValorBruto(pedidoAtualizado.getValorBruto());
+                    pedido.setValorLiquido(pedidoAtualizado.getValorLiquido());
+                    pedido.setCentroDeCusto(pedidoAtualizado.getCentroDeCusto());
+                    pedido.setTipoPedido(pedidoAtualizado.getTipoPedido());
+                    pedido.setTipoStatus(pedidoAtualizado.getTipoStatus());
+                    return repository.save(pedidoAtualizado);
                 })
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    public List<Pagamento> pesquisarMeusPedidos(String nomeForcenedor, String nomeStatus){
+    public List<Pedido> pesquisarMeusPedidos(String nomeForcenedor, String nomeStatus){
 
         // TODO: Passar para uma função global/compartilhada
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -158,13 +158,13 @@ public class PagamentoUsecase {
         return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%");
     }
 
-    public void inativarPagamento(Integer id){
+    public void inativarPedido(Integer id){
         repository
                 .findById(id)
-                .map( pagamento -> {
-                    repository.delete(pagamento);
+                .map( pedido -> {
+                    repository.delete(pedido);
                     return Void.TYPE;
                 })
-                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pagamento não encontrado") );
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado") );
     }
 }

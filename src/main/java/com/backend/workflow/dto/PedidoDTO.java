@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
-public class PagamentoDTO {
+public class PedidoDTO {
 
     private String nomeFornecedor;
     private String observacao;

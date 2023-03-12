@@ -1,10 +1,10 @@
 package com.backend.workflow.controller;
 
 
-import com.backend.workflow.dto.PagamentoDTO;
+import com.backend.workflow.dto.PedidoDTO;
 import com.backend.workflow.entity.*;
 import com.backend.workflow.repository.*;
-import com.backend.workflow.useCase.PagamentoUsecase;
+import com.backend.workflow.useCase.PedidoUsecase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,31 +15,31 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/pagamentos")
+@RequestMapping("/api/pedidos")
 @CrossOrigin("http://localhost:4200")
 @RequiredArgsConstructor
-public class PagamentoController {
+public class PedidoController {
 
-    private final PagamentoRepository repository;
-    private final PagamentoUsecase usecase;
+    private final PedidoRepository repository;
+    private final PedidoUsecase usecase;
 
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Pagamento salvar(@RequestBody PagamentoDTO dto){
+    public Pedido salvar(@RequestBody PedidoDTO dto){
        return usecase.salvar(dto);
     }
 
     @GetMapping
-    public List<Pagamento> pesquisar(
+    public List<Pedido> pesquisar(
         @RequestParam(value = "nomeFornecedor", required = false, defaultValue = "") String nomeFornecedor,
         @RequestParam(value = "nomeStatus", required = false, defaultValue = "") String nomeStatus){
         return usecase.pesquisar(nomeFornecedor, nomeStatus);
     }
 
-    // metodo para achar um pagamento pelo ID, depois exception para caso não exista o ID (Postman)
+    // metodo para achar um pedido pelo ID, depois exception para caso não exista o ID (Postman)
     @GetMapping("{id}")
-    public Pagamento acharPorId(@PathVariable Integer id){
+    public Pedido acharPorId(@PathVariable Integer id){
         return repository
                 .findById(id)
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -47,8 +47,8 @@ public class PagamentoController {
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void atualizar(@PathVariable Integer id, @RequestBody Pagamento pagamentoAtualizado){
-        usecase.atualizar(id, pagamentoAtualizado);
+    public void atualizar(@PathVariable Integer id, @RequestBody Pedido pedidoAtualizado){
+        usecase.atualizar(id, pedidoAtualizado);
     }
 
     @PutMapping("/atualizandoStatus/{id}/{tipoStatus}")
@@ -70,7 +70,7 @@ public class PagamentoController {
     }
 
     @GetMapping("/teste")
-    public List<Pagamento> pesquisarMeusPedidos(
+    public List<Pedido> pesquisarMeusPedidos(
             @RequestParam(value = "nomeFornecedor", required = false, defaultValue = "") String nomeForcenedor,
             @RequestParam(value = "nomeStatus", required = false, defaultValue = "") String nomeStatus){
         return usecase.pesquisarMeusPedidos(nomeForcenedor, nomeStatus);
@@ -78,8 +78,8 @@ public class PagamentoController {
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void inativarPagamento( @PathVariable Integer id ){
-        usecase.inativarPagamento(id);
+    public void inativarPedido( @PathVariable Integer id ){
+        usecase.inativarPedido(id);
     }
 
     @GetMapping("/dashboard")
