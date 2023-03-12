@@ -1,25 +1,28 @@
 package com.backend.workflow.entity;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
-@Data
+
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "cargos")
+@Table(name = "CARGOS")
 public class Cargo {
 
     @Id
-    @Column(name = "cargo_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name="ROLES")
     @NotEmpty(message = "{O campo role é obrigatório}")
     private String roles;
 
-    @Column(nullable = false)
+    @Column(name="AREA")
     @NotEmpty(message = "{O campo area é obrigatório}")
     private String area;
 }

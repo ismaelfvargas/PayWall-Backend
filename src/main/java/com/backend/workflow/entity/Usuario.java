@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import static javax.persistence.ConstraintMode.NO_CONSTRAINT;
 
 @Data
 @NoArgsConstructor
@@ -27,7 +30,6 @@ public class Usuario {
     private String password;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="cargo_id")
-   private Cargo cargo;
-
+    @JoinColumn(name="CARGO_ID", referencedColumnName="ID")
+    private Cargo cargo;
 }
