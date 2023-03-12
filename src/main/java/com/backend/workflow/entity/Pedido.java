@@ -20,7 +20,7 @@ import java.util.Date;
 @Builder
 
 @Table(name = "pedidos")
-public class Pagamento {
+public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
