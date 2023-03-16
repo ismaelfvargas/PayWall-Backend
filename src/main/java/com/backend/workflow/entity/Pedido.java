@@ -92,6 +92,19 @@ public class Pedido {
     @Column(name = "mensagem_reprovacao")
     private String mensagemReprovacao;
 
+    @Column(name = "pedido_inativo")
+    private String pedidoInativo;
+
+    @Column(name = "motivo_inativacao")
+    private String motivoInativacao;
+
+    @Column(name = "id_usuario_alt")
+    private Integer idUsuarioAlt;
+
+    @Column(name = "data_ped_inat")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date dataPedInat;
+
     // inclui a data automatico
     @PrePersist
     public void insereDataAutomatico() {

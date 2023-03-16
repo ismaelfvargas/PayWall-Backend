@@ -2,14 +2,17 @@ package com.backend.workflow.useCase;
 
 import com.backend.workflow.dto.PedidoDTO;
 import com.backend.workflow.entity.*;
+import com.backend.workflow.enums.StatusPedidoEnum;
 import com.backend.workflow.repository.*;
+import com.backend.workflow.service.PedidoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,6 +25,7 @@ public class PedidoUsecase {
     private final TipoStatusRepository tipoStatusRepository;
     private final UsuarioRepository usuarioRepository;
     private final TipoStatusAdtoRepository tipoStatusAdtoRepository;
+    private final PedidoService pedidoService;
 
     public Pedido salvar (PedidoDTO dto){
 
@@ -158,13 +162,24 @@ public class PedidoUsecase {
         return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%");
     }
 
-    public void inativarPedido(Integer id){
-        repository
-                .findById(id)
-                .map( pedido -> {
-                    repository.delete(pedido);
-                    return Void.TYPE;
-                })
-                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado") );
+    public void inativarPedido(Integer id, String motivoInativarPedido){
+
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+       Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+       String username = "";
+       if (principal instanceof UserDetails) {
+           username = ((UserDetails)principal).getUsername();
+       } else {
+           username = principal.toString();
+       }
+       Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+
+       Pedido pedido = pedidoService.get(id);
+       pedido.setPedidoInativo(StatusPedidoEnum.S.getId());
+       pedido.setDataPedInat(new Date());
+       pedido.setMotivoInativacao(motivoInativarPedido);
+       pedido.setIdUsuarioAlt(usuario.getId());
+
+       repository.save(pedido);
     }
 }
