@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.text.ParseException;
 import java.util.List;
 
 
@@ -76,10 +78,10 @@ public class PedidoController {
         return usecase.pesquisarMeusPedidos(nomeForcenedor, nomeStatus);
     }
 
-    @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void inativarPedido( @PathVariable Integer id ){
-        usecase.inativarPedido(id);
+    @PutMapping("/inativarPedido/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void inativarPedido(@PathVariable Integer id, @RequestParam String motivoInativarPedido){
+        usecase.inativarPedido(id, motivoInativarPedido);
     }
 
     @GetMapping("/dashboard")
