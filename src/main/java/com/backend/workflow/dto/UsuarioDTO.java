@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UsuarioDTO {
 
-    private String username;
+    private String email;
     private String password;
     private Long cargoId;
+    private String name;
 }

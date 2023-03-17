@@ -5,9 +5,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
-import static javax.persistence.ConstraintMode.NO_CONSTRAINT;
 
 @Data
 @NoArgsConstructor
@@ -20,10 +18,10 @@ public class Usuario {
     @Column(name = "usuario_id")
     private Integer id;
 
-    @Column(unique = true, name = "nome")
-    @NotEmpty(message = "{O campo login é obrigatório}")
+    @Column(unique = true, name = "email")
+    @NotEmpty(message = "{O campo email é obrigatório}")
     @Email
-    private String username;
+    private String email;
 
     @Column(name = "senha", nullable = false)
     @NotEmpty(message = "{O campo senha é obrigatório}")
@@ -32,4 +30,8 @@ public class Usuario {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="CARGO_ID", referencedColumnName="ID")
     private Cargo cargo;
+
+    @Column(unique = true, name = "nome")
+    @NotEmpty(message = "{O campo nome é obrigatório}")
+    private String name;
 }

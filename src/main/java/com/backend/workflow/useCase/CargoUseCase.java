@@ -37,14 +37,14 @@ public class CargoUseCase {
     private void permissaoCriarUsuario(){
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = "";
+        String email = "";
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            email = ((UserDetails)principal).getUsername();
         } else {
-            username = principal.toString();
+            email = principal.toString();
         }
 
-        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
         String usuarioCargo = usuario.getCargo().getRoles();
         String usuarioRole = usuario.getCargo().getArea();
 
