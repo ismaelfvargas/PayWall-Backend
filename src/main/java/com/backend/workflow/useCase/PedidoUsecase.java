@@ -32,16 +32,16 @@ public class PedidoUsecase {
         // TODO: Passar para uma função global/compartilhada
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        String username = "";
+        String email = "";
 
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            email = ((UserDetails)principal).getUsername();
         } else {
-            username = principal.toString();
+            email = principal.toString();
         }
         //
 
-        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
         Integer idTipoPedido = dto.getIdTipoPedido();
 //        Integer idTipoStatus = dto.getIdTipoStatus();
@@ -90,16 +90,16 @@ public class PedidoUsecase {
         // TODO: Passar para uma função global/compartilhada
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        String username = "";
+        String email = "";
 
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            email = ((UserDetails)principal).getUsername();
         } else {
-            username = principal.toString();
+            email = principal.toString();
         }
         //
 
-        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
         if (Objects.equals(new String("USUARIO"), new String(usuario.getCargo().getRoles()))){
             return repository.findByNomeFornecedorAndNomeStatusAndUserId( "%" + nomeFornecedor + "%",   "%" + nomeStatus + "%", usuario.getId());
@@ -137,16 +137,16 @@ public class PedidoUsecase {
         // TODO: Passar para uma função global/compartilhada
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        String username = "";
+        String email = "";
 
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            email = ((UserDetails)principal).getUsername();
         } else {
-            username = principal.toString();
+            email = principal.toString();
         }
         //
 
-        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
         if (Objects.equals(new String("USUARIO"), new String(usuario.getCargo().getRoles()))){
             return repository.findByNomeFornecedorAndNomeStatusAndUserId( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%", usuario.getId());
@@ -166,13 +166,13 @@ public class PedidoUsecase {
 
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-       String username = "";
+       String email = "";
        if (principal instanceof UserDetails) {
-           username = ((UserDetails)principal).getUsername();
+           email = ((UserDetails)principal).getUsername();
        } else {
-           username = principal.toString();
+           email = principal.toString();
        }
-       Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+       Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
        Pedido pedido = pedidoService.get(id);
        pedido.setPedidoInativo(StatusPedidoEnum.S.getId());

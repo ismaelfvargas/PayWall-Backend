@@ -37,22 +37,23 @@ public class UsuarioUseCase {
         BCryptPasswordEncoder criptografar = new BCryptPasswordEncoder();
         String senhaCriptografada = criptografar.encode(dto.getPassword());
         usuario.setPassword(senhaCriptografada);
-        usuario.setUsername(dto.getUsername());
+        usuario.setEmail(dto.getEmail());
         usuario.setCargo(cargo);
+        usuario.setName(dto.getName());
         return usuario;
     }
 
     private void permissaoCriarUsuario(UsuarioDTO dto){
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = "";
+        String email = "";
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            email = ((UserDetails)principal).getUsername();
         } else {
-            username = principal.toString();
+            email = principal.toString();
         }
 
-        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
         String usuarioCargo = usuario.getCargo().getRoles();
         String usuarioRole = usuario.getCargo().getArea();
 
@@ -71,16 +72,16 @@ public class UsuarioUseCase {
         // TODO: Passar para uma função global/compartilhada
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        String username = "";
+        String email = "";
 
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            email = ((UserDetails)principal).getUsername();
         } else {
-            username = principal.toString();
+            email = principal.toString();
         }
         //
 
-        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
         String adminRole = usuario.getCargo().getRoles();
         String gerente = "GERENTE";
@@ -99,16 +100,16 @@ public class UsuarioUseCase {
         // TODO: Passar para uma função global/compartilhada
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        String username = "";
+        String email = "";
 
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            email = ((UserDetails)principal).getUsername();
         } else {
-            username = principal.toString();
+            email = principal.toString();
         }
         //
 
-        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
         String adminRole = usuario.getCargo().getRoles();
         String assistente = "ASSISTENTE";
@@ -123,16 +124,16 @@ public class UsuarioUseCase {
         // TODO: Passar para uma função global/compartilhada
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        String username = "";
+        String email = "";
 
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            email = ((UserDetails)principal).getUsername();
         } else {
-            username = principal.toString();
+            email = principal.toString();
         }
         //
 
-        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
         String adminRole = usuario.getCargo().getRoles();
         String administrador = "ADMINISTRADOR";
