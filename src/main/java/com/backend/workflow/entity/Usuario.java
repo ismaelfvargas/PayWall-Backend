@@ -10,20 +10,20 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "usuarios")
+@Table(name = "USUARIOS")
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "usuario_id")
-    private Integer id;
+    @Column(name = "ID")
+    private Long id;
 
-    @Column(unique = true, name = "email")
+    @Column(unique = true, name = "EMAIL")
     @NotEmpty(message = "{O campo email é obrigatório}")
     @Email
     private String email;
 
-    @Column(name = "senha", nullable = false)
+    @Column(name = "SENHA", nullable = false)
     @NotEmpty(message = "{O campo senha é obrigatório}")
     private String password;
 
@@ -31,7 +31,7 @@ public class Usuario {
     @JoinColumn(name="CARGO_ID", referencedColumnName="ID")
     private Cargo cargo;
 
-    @Column(unique = true, name = "nome")
+    @Column(name = "NOME",  nullable = false)
     @NotEmpty(message = "{O campo nome é obrigatório}")
     private String name;
 }

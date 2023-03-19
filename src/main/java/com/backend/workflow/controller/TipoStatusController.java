@@ -1,6 +1,6 @@
 package com.backend.workflow.controller;
 
-import com.backend.workflow.entity.TipoStatus;
+import com.backend.workflow.entity.StatusSolicitacao;
 import com.backend.workflow.repository.TipoStatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,17 +20,17 @@ public class TipoStatusController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TipoStatus salvar(@RequestBody @Valid TipoStatus tipoStatus){
-        return repository.save(tipoStatus);
+    public StatusSolicitacao salvar(@RequestBody @Valid StatusSolicitacao statusSolicitacao){
+        return repository.save(statusSolicitacao);
     }
 
     @GetMapping
-    public List<TipoStatus> obterTodos(){
+    public List<StatusSolicitacao> obterTodos(){
         return repository.findAll();
     }
 
     @GetMapping("{id}")
-    public TipoStatus acharPorId( @PathVariable Integer id ){
+    public StatusSolicitacao acharPorId(@PathVariable Long id ){
         return repository
                 .findById(id)
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Status não encontrado"));

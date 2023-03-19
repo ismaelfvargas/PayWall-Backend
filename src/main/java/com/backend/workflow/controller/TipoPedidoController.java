@@ -30,7 +30,7 @@ public class TipoPedidoController {
     }
 
     @GetMapping("{id}")
-    public TipoPedido acharPorId( @PathVariable Integer id ){
+    public TipoPedido acharPorId( @PathVariable Long id ){
         return repository
                 .findById(id)
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Solicitação não encontrada") );

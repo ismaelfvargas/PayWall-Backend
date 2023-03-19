@@ -15,5 +15,5 @@ public interface FileDBRepository extends JpaRepository<FileDB, String> {
     @Transactional
     @Query( "select f from FileDB f where f.idSolicitacao = :idSolicitacao " )
     List<FileDB> findByIdPagamento(
-            @Param("idSolicitacao") Integer idSolicitacao);
+            @Param("idSolicitacao") Long idSolicitacao);
 }

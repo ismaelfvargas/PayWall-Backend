@@ -1,6 +1,6 @@
 package com.backend.workflow.controller;
 
-import com.backend.workflow.entity.TipoStatusAdto;
+import com.backend.workflow.entity.StatusAdiantamento;
 import com.backend.workflow.repository.TipoStatusAdtoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,17 +19,17 @@ public class TipoStatusAdtoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TipoStatusAdto salvar(@RequestBody @Valid TipoStatusAdto tipoStatusAdto){
-        return repository.save(tipoStatusAdto);
+    public StatusAdiantamento salvar(@RequestBody @Valid StatusAdiantamento statusAdiantamento){
+        return repository.save(statusAdiantamento);
     }
 
     @GetMapping
-    public List<TipoStatusAdto> obterTodos(){
+    public List<StatusAdiantamento> obterTodos(){
         return repository.findAll();
     }
 
     @GetMapping("{id}")
-    public TipoStatusAdto acharPorId( @PathVariable Integer id ){
+    public StatusAdiantamento acharPorId(@PathVariable Long id ){
         return repository
                 .findById(id)
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Status não encontrado"));
