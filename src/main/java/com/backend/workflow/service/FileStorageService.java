@@ -16,7 +16,7 @@ public class FileStorageService {
     @Autowired
     private FileDBRepository fileDBRepository;
 
-    public FileDB store(MultipartFile file, Integer idSolicitacao) throws IOException {
+    public FileDB store(MultipartFile file, Long idSolicitacao) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         FileDB FileDB = new FileDB(fileName, file.getContentType(), file.getBytes(), idSolicitacao);
 
@@ -31,7 +31,7 @@ public class FileStorageService {
         return fileDBRepository.findAll().stream();
     }
 
-    public Stream<FileDB> getDocumentos(Integer idPagamento) {
+    public Stream<FileDB> getDocumentos(Long idPagamento) {
         return fileDBRepository.findByIdPagamento(idPagamento).stream();
     }
 }

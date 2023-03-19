@@ -39,7 +39,7 @@ public class FileController {
     }
 
     @GetMapping("/buscarDocumento/{idPagamento}")
-    public ResponseEntity<List<ResponseFile>> getDocumentos(@PathVariable Integer idPagamento) {
+    public ResponseEntity<List<ResponseFile>> getDocumentos(@PathVariable Long idPagamento) {
         return useCase.getDocumentos(idPagamento);
     }
 }

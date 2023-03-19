@@ -41,7 +41,7 @@ public class PedidoController {
 
     // metodo para achar um pedido pelo ID, depois exception para caso não exista o ID (Postman)
     @GetMapping("{id}")
-    public Pedido acharPorId(@PathVariable Integer id){
+    public Pedido acharPorId(@PathVariable Long id){
         return repository
                 .findById(id)
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -49,25 +49,25 @@ public class PedidoController {
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void atualizar(@PathVariable Integer id, @RequestBody Pedido pedidoAtualizado){
+    public void atualizar(@PathVariable Long id, @RequestBody Pedido pedidoAtualizado){
         usecase.atualizar(id, pedidoAtualizado);
     }
 
     @PutMapping("/atualizandoStatus/{id}/{tipoStatus}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void aprovarStatus(@PathVariable int id, @PathVariable int tipoStatus){
+    public void aprovarStatus(@PathVariable Long id, @PathVariable Long tipoStatus){
         repository.aprovarStatus(id, tipoStatus);
     }
 
     @PutMapping("/atualizandoStatusAdto/{id}/{tipoStatusAdto}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void alterarStatusAdto(@PathVariable int id, @PathVariable int tipoStatusAdto){
+    public void alterarStatusAdto(@PathVariable Long id, @PathVariable Long tipoStatusAdto){
         repository.alterarStatusAdto(id, tipoStatusAdto);
     }
 
     @PutMapping("/inserirMensagemReprovacao/{id}/{mensagemReprovacao}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void inserirMensagemReprovacao(@PathVariable int id, @PathVariable String mensagemReprovacao){
+    public void inserirMensagemReprovacao(@PathVariable Long id, @PathVariable String mensagemReprovacao){
         repository.inserirMensagemReprovacao(id, mensagemReprovacao);
     }
 
@@ -80,7 +80,7 @@ public class PedidoController {
 
     @PutMapping("/inativarPedido/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void inativarPedido(@PathVariable Integer id, @RequestParam String motivoInativarPedido){
+    public void inativarPedido(@PathVariable Long id, @RequestParam String motivoInativarPedido){
         usecase.inativarPedido(id, motivoInativarPedido);
     }
 

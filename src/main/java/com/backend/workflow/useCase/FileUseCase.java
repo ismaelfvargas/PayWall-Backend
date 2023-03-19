@@ -25,7 +25,7 @@ public class FileUseCase {
     public ResponseEntity<ResponseMessage> uploadFile(MultipartFile file, String idSolicitacao){
         String message = "";
         try {
-            storageService.store(file, Integer.parseInt(idSolicitacao));
+            storageService.store(file, Long.valueOf((idSolicitacao)));
 
             message = "Uploaded the file successfully: " + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
@@ -61,7 +61,7 @@ public class FileUseCase {
                 .body(fileDB.getData());
     }
 
-    public ResponseEntity<List<ResponseFile>> getDocumentos(Integer idPagamento){
+    public ResponseEntity<List<ResponseFile>> getDocumentos(Long idPagamento){
         List<ResponseFile> files = storageService.getDocumentos(idPagamento).map(dbFile -> {
             String fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()

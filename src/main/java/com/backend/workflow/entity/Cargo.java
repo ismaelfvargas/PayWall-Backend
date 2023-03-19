@@ -16,6 +16,8 @@ public class Cargo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "CARGOS_ID_SEQ", sequenceName = "CARGOS_ID_SEQ", allocationSize = 1)
+    @Column(name = "ID")
     private Long id;
 
     @Column(name="ROLES")

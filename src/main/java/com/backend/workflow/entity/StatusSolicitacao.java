@@ -11,13 +11,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "status_solicitacoes")
-public class TipoStatus {
+@Table(name = "STATUS_SOLICITACOES")
+public class StatusSolicitacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "ID")
+    private Long id;
 
-    @Column(name = "nome_status", nullable = false)
+    @Column(name = "NOME_STATUS", nullable = false)
     private String nomeStatus;
 }

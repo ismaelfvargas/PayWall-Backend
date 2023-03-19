@@ -14,7 +14,7 @@ public class PedidoService {
 
     private final PedidoRepository repository;
 
-    public Pedido get(Integer id){
+    public Pedido get(Long id){
         return repository.findById(id).orElseThrow(NotFoundException::new);
     }
 

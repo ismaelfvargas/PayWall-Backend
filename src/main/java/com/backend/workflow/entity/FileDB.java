@@ -20,12 +20,12 @@ public class FileDB {
     private byte[] data;
 
     @Column(name = "id_pagamento")
-    private Integer idSolicitacao;
+    private Long idSolicitacao;
 
     public FileDB() {
     }
 
-    public FileDB(String name, String type, byte[] data, Integer idSolicitacao) {
+    public FileDB(String name, String type, byte[] data, Long idSolicitacao) {
         this.name = name;
         this.type = type;
         this.data = data;
@@ -40,11 +40,11 @@ public class FileDB {
         return name;
     }
 
-    public void setIdSolicitacao(Integer idSolicitacao) {
+    public void setIdSolicitacao(Long idSolicitacao) {
         this.idSolicitacao = idSolicitacao;
     }
 
-    public Integer getIdSolicitacao() {
+    public Long getIdSolicitacao() {
         return idSolicitacao;
     }
 

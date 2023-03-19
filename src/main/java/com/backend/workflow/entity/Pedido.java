@@ -19,54 +19,54 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 
-@Table(name = "pedidos")
+@Table(name = "PEDIDOS")
 public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "ID")
+    private Long id;
 
-    @Column(name = "nome_fornecedor", nullable = false, length = 50)
+    @Column(name = "NOME_FORNECEDOR", nullable = false, length = 50)
     @NotEmpty(message = "campo nome é obrigatorio")
     private String nomeFornecedor;
 
-    @Column(nullable = false, length = 150)
+    @Column(name = "OBSERVACAO", nullable = false, length = 150)
     private String observacao;
 
-    @Column(name = "data_cadastro", updatable = false)
+    @Column(name = "DATA_CADASTRO", updatable = false)
     private LocalDate dataCadastro;
 
-    @Column(name = "data_vencimento", nullable = false)
+    @Column(name = "DATA_VENCIMENTO", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dataVencimento;
 
-    @Column(name = "data_emissao", nullable = false)
+    @Column(name = "DATA_EMISSAO", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dataEmissao;
 
-    @Column(name = "valor_bruto")
+    @Column(name = "VALOR_BRUTO")
     @DecimalMin(value = "0.0", inclusive = false)
     @Digits(integer=19, fraction=2)
     private BigDecimal valorBruto;
 
-    @Column(name = "valor_liquido", nullable = false)
+    @Column(name = "VALOR_LIQUIDO", nullable = false)
     @DecimalMin(value = "0.0", inclusive = false)
     @Digits(integer=19, fraction=2)
     private BigDecimal valorLiquido;
 
-    @Column(name = "desconto", length = 11)
+    @Column(name = "DESCONTO", length = 11)
     @DecimalMin(value = "0.0", inclusive = false)
     @Digits(integer=19, fraction=2)
     private BigDecimal desconto;
 
-    @Column(length = 11)
+    @Column(name = "TRIBUTO", length = 11)
     @DecimalMin(value = "0.0", inclusive = false)
     @Digits(integer=19, fraction=2)
     private BigDecimal tributo;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="id_usuario")
+    @JoinColumn(name="ID_USUARIO", referencedColumnName="ID")
     Usuario usuario;
 
 //    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -74,34 +74,34 @@ public class Pedido {
 //    CentroCusto centroCusto;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="tipo_pedido")
+    @JoinColumn(name="ID_TIPO_PEDIDO", referencedColumnName="ID")
     TipoPedido tipoPedido;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="id_tipo_status")
-    TipoStatus tipoStatus;
+    @JoinColumn(name="ID_TIPO_STATUS", referencedColumnName="ID")
+    StatusSolicitacao statusSolicitacao;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="id_tipo_status_adto")
-    TipoStatusAdto tipoStatusAdto;
+    @JoinColumn(name="ID_TIPO_STATUS_ADTO", referencedColumnName="ID")
+    StatusAdiantamento statusAdiantamento;
 
-    @Column(name = "centro_custo")
+    @Column(name = "CENTRO_CUSTO")
     @NotEmpty(message = "campo centro de custo é obrigatorio")
     private String centroDeCusto;
 
-    @Column(name = "mensagem_reprovacao")
+    @Column(name = "MENSAGEM_REPROVACAO")
     private String mensagemReprovacao;
 
-    @Column(name = "pedido_inativo")
+    @Column(name = "PEDIDO_INATIVO")
     private String pedidoInativo;
 
-    @Column(name = "motivo_inativacao")
+    @Column(name = "MOTIVO_INATIVACAO")
     private String motivoInativacao;
 
-    @Column(name = "id_usuario_alt")
-    private Integer idUsuarioAlt;
+    @Column(name = "ID_USUARIO_ALT")
+    private Long idUsuarioAlt;
 
-    @Column(name = "data_ped_inat")
+    @Column(name = "DATA_PED_INAT")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dataPedInat;
 

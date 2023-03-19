@@ -43,7 +43,7 @@ public class PedidoUsecase {
 
         Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow( () -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
-        Integer idTipoPedido = dto.getIdTipoPedido();
+        Long idTipoPedido = dto.getIdTipoPedido();
 //        Integer idTipoStatus = dto.getIdTipoStatus();
 
         TipoPedido tipoPedido = tipoPedidoRepository.findById(idTipoPedido).orElseThrow(() ->
@@ -52,7 +52,7 @@ public class PedidoUsecase {
                 )
         );
 
-        TipoStatus tipoStatus = tipoStatusRepository.findById(1).orElseThrow(() ->
+        StatusSolicitacao statusSolicitacao = tipoStatusRepository.findById(1L).orElseThrow(() ->
                 new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "Tipo do status inexistente"
                 )
@@ -70,16 +70,16 @@ public class PedidoUsecase {
         pedido.setValorLiquido(dto.getValorLiquido());
         pedido.setCentroDeCusto(dto.getCentroDeCusto());
         pedido.setTipoPedido(tipoPedido);
-        pedido.setTipoStatus(tipoStatus);
+        pedido.setStatusSolicitacao(statusSolicitacao);
         pedido.setUsuario(usuario);
 
         if (idTipoPedido == 2) {
-            TipoStatusAdto tipoStatusAdto = tipoStatusAdtoRepository.findById(1).orElseThrow(() ->
+            StatusAdiantamento statusAdiantamento = tipoStatusAdtoRepository.findById(1L).orElseThrow(() ->
                     new ResponseStatusException(
                             HttpStatus.BAD_REQUEST, "Tipo do status inexistente"
                     )
             );
-            pedido.setTipoStatusAdto(tipoStatusAdto);
+            pedido.setStatusAdiantamento(statusAdiantamento);
         }
 
         return repository.save(pedido);
@@ -112,10 +112,10 @@ public class PedidoUsecase {
         return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeFornecedor + "%",   "%" + nomeStatus + "%");
     }
 
-    public void atualizar(Integer id, Pedido pedidoAtualizado) {
+    public void atualizar(Long id, Pedido pedidoAtualizado) {
         repository.findById(id)
                 .map(pedido -> {
-                    pedido.setTipoStatus(pedidoAtualizado.getTipoStatus());
+                    pedido.setStatusSolicitacao(pedidoAtualizado.getStatusSolicitacao());
                     pedido.setTributo(pedidoAtualizado.getTributo());
                     pedido.setDataEmissao(pedidoAtualizado.getDataEmissao());
                     pedido.setDataVencimento(pedidoAtualizado.getDataVencimento());
@@ -126,7 +126,7 @@ public class PedidoUsecase {
                     pedido.setValorLiquido(pedidoAtualizado.getValorLiquido());
                     pedido.setCentroDeCusto(pedidoAtualizado.getCentroDeCusto());
                     pedido.setTipoPedido(pedidoAtualizado.getTipoPedido());
-                    pedido.setTipoStatus(pedidoAtualizado.getTipoStatus());
+                    pedido.setStatusSolicitacao(pedidoAtualizado.getStatusSolicitacao());
                     return repository.save(pedidoAtualizado);
                 })
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -162,7 +162,7 @@ public class PedidoUsecase {
         return repository.findByNomeFornecedorAndNomeStatus( "%" + nomeForcenedor + "%",   "%" + nomeStatus + "%");
     }
 
-    public void inativarPedido(Integer id, String motivoInativarPedido){
+    public void inativarPedido(Long id, String motivoInativarPedido){
 
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

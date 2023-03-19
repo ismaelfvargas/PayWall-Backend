@@ -24,10 +24,10 @@ public class PedidoDTO {
     private BigDecimal desconto;
     private BigDecimal tributo;
     private String centroDeCusto;
-    private Integer idUsuario;
-    private Integer idTipoPedido;
-    private Integer idTipoStatus;
-    private Integer idTipoStatusAdto;
+    private Long idUsuario;
+    private Long idTipoPedido;
+    private Long idTipoStatus;
+    private Long idTipoStatusAdto;
 
     // inclui a data automatico
     @PrePersist

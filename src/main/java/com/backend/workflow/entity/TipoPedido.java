@@ -11,13 +11,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "tipo_pedidos")
+@Table(name = "TIPO_PEDIDOS")
 public class TipoPedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "ID")
+    private Long id;
 
-    @Column(name = "nome_pedido", nullable = false)
+    @Column(name = "NOME_PEDIDO", nullable = false)
     private String nomePedido;
 }
