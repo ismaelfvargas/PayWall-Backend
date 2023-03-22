@@ -25,13 +25,11 @@ public class CargoController {
     }
 
     @GetMapping("{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<Cargo> buscarId(@PathVariable Long id){
         return useCase.buscarId(id);
     }
 
     @GetMapping()
-    @ResponseStatus(HttpStatus.ACCEPTED)
     public List<Cargo> listar(){
         return useCase.listar();
     }

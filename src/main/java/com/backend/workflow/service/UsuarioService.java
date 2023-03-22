@@ -2,14 +2,13 @@ package com.backend.workflow.service;
 
 import com.backend.workflow.entity.Usuario;
 import com.backend.workflow.exception.RegisteredUserException;
-import com.backend.workflow.message.MessagesComponent;
+import com.backend.workflow.exception.UsernameNotFoundException;
 import com.backend.workflow.repository.UsuarioRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
@@ -32,7 +31,7 @@ public class UsuarioService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Usuario usuario = repository
                             .findByEmail(email)
-                            .orElseThrow(() -> new UsernameNotFoundException("Login não encontrado"));
+                            .orElseThrow(UsernameNotFoundException::new);
         return User
                 .builder()
                 .username(usuario.getEmail())
