@@ -1,15 +1,13 @@
 package com.backend.workflow.useCase;
 
-import com.backend.workflow.dto.UsuarioDTO;
 import com.backend.workflow.entity.Cargo;
 import com.backend.workflow.entity.Usuario;
 import com.backend.workflow.enums.PerfisFuncoesEnum;
 import com.backend.workflow.exception.NotAcceptableException;
-import com.backend.workflow.exception.NotAuthorizedException;
-import com.backend.workflow.message.MessagesComponent;
+import com.backend.workflow.exception.RegisteredUserException;
+import com.backend.workflow.exception.RoleException;
 import com.backend.workflow.repository.UsuarioRepository;
 import com.backend.workflow.service.CargoService;
-import com.backend.workflow.service.UsuarioService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +28,18 @@ public class CargoUseCase {
     private final UsuarioRepository usuarioRepository;
 
     public ResponseEntity <Cargo> salvar(Cargo cargo){
-        permissaoCriarUsuario();
+        permissaoCriarCargo(cargo);
         return ResponseEntity.ok(service.save(cargo));
     }
 
-    private void permissaoCriarUsuario(){
+    private void permissaoCriarCargo(Cargo cargo){
+
+        boolean existsRole = service.existsByRoles(cargo.getRoles());
+        boolean existsArea = service.existsByArea(cargo.getArea());
+        String roles = cargo.getRoles();
+        if(Objects.equals(existsArea, existsRole)){
+            throw new RoleException(roles);
+        }
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String email = "";

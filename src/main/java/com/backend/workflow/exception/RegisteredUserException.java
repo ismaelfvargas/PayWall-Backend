@@ -7,6 +7,6 @@ import lombok.AllArgsConstructor;
 public class RegisteredUserException extends RuntimeException{
 
     public RegisteredUserException(String login ){
-        super(MessagesComponent.get("search.RegisteredUserException") + login);
+        super(MessagesComponent.get("search.RegisteredUserException") + " " + login);
     }
 }

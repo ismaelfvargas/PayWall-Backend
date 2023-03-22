@@ -18,8 +18,12 @@ public class CargoService {
         return repository.findById(id).get();
     }
 
-    public Cargo findByArea(String area){
-        return repository.findByArea(area).get();
+    public boolean existsByArea(String area){
+        return repository.existsByArea(area);
+    }
+
+    public boolean existsByRoles(String roles){
+        return repository.existsByRoles(roles);
     }
 
     public Cargo save(Cargo entity){

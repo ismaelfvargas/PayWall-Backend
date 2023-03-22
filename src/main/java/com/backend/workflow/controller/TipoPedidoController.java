@@ -35,5 +35,4 @@ public class TipoPedidoController {
                 .findById(id)
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Solicitação não encontrada") );
     }
-
 }
